@@ -7,6 +7,8 @@ public class EventPAMBase
         // Error Messages
         public const string SERILOG_NULLOPTIONS = "You have sent a blank value! Something went wrong. Please try again.";
         public const string VALIDATION = "Validation failed: ";
+        public const string NOT_AUTHENTICATED = "You are not authenticated.";
+        public const string NOT_AUTHORIZED = "You are not authorized.";
 
         // Warning Messages
 
