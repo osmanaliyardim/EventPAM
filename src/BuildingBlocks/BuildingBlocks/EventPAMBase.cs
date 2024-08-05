@@ -2,7 +2,7 @@
 
 public class EventPAMBase
 {
-    public class Messages
+    public static class Messages
     {
         // Error Messages
 
@@ -18,15 +18,21 @@ public class EventPAMBase
 
     }
 
-    public class Configs
+    public static class Configs
     {
         // Connection Strings - Keys - Secrets
         public const string YARP_GATEWAY_NAME = "ReverseProxy";
     }
 
-    public class Endpoints
+    public static class Endpoints
     {
         // Endpoints - Urls
 
+    }
+
+    public static class Policies
+    {
+        // Policies
+        public const string RATE_LIMITING = "fixed";
     }
 }
