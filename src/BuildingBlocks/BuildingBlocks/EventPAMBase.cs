@@ -21,7 +21,7 @@ public class EventPAMBase
     public class Configs
     {
         // Connection Strings - Keys - Secrets
-
+        public const string YARP_GATEWAY_NAME = "ReverseProxy";
     }
 
     public class Endpoints
