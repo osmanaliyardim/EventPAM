@@ -11,7 +11,7 @@ public class EventPAMBase
         public const string NOT_AUTHORIZED = "You are not authorized.";
 
         // Warning Messages
-
+        public const string PERFORMANCE_WARNING = "Performance -> ";
 
         // Info Messages
         public const string CACHE_FETCHED = "Fetched from Cache -> ";
