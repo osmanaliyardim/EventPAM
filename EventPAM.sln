@@ -81,11 +81,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{81F4346A-DFE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DD81E98B-0978-4284-9E7D-B3B64D714C1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTest", "src\Services\EventManager\tests\IntegrationTest\IntegrationTest.csproj", "{472ED3B6-C1B4-4D38-9F26-B95135F8FFD3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTest", "src\Services\EventManager\tests\IntegrationTest\IntegrationTest.csproj", "{472ED3B6-C1B4-4D38-9F26-B95135F8FFD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManager.API", "src\Services\EventManager\src\EventManager.API\EventManager.API.csproj", "{43DF0E62-17A8-4DDE-9BEA-8FD7D49D39EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventManager.API", "src\Services\EventManager\src\EventManager.API\EventManager.API.csproj", "{43DF0E62-17A8-4DDE-9BEA-8FD7D49D39EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManager", "src\Services\EventManager\src\EventManager\EventManager.csproj", "{EC10DC0C-E22B-47E3-BFBE-E114ABBD883F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventManager", "src\Services\EventManager\src\EventManager\EventManager.csproj", "{EC10DC0C-E22B-47E3-BFBE-E114ABBD883F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{40A22282-ED87-4A36-B580-F61DCE1B9AF9}"
 EndProject
@@ -95,19 +95,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{93D2C311-18D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2D775161-83DB-42FF-AD71-903673C3E33C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Offer.API", "src\Services\Offer\src\Offer.API\Offer.API.csproj", "{C30CFF96-9A9A-44CC-922F-B07252B7812B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Offer.API", "src\Services\Offer\src\Offer.API\Offer.API.csproj", "{C30CFF96-9A9A-44CC-922F-B07252B7812B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Offer", "src\Services\Offer\src\Offer\Offer.csproj", "{103DC07A-EF88-4736-BD55-BB2382D4A087}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Offer", "src\Services\Offer\src\Offer\Offer.csproj", "{103DC07A-EF88-4736-BD55-BB2382D4A087}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Venue.API", "src\Services\Venue\src\Venue.API\Venue.API.csproj", "{69A65B70-2C02-4F56-B864-05879310A350}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Venue.API", "src\Services\Venue\src\Venue.API\Venue.API.csproj", "{69A65B70-2C02-4F56-B864-05879310A350}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Venue", "src\Services\Venue\src\Venue\Venue.csproj", "{E3A0E2B6-BD72-44FE-9E49-B4D8AB5471C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Venue", "src\Services\Venue\src\Venue\Venue.csproj", "{E3A0E2B6-BD72-44FE-9E49-B4D8AB5471C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTest", "src\Services\Offer\tests\IntegrationTest\IntegrationTest.csproj", "{0177ED2E-F9E6-4336-8A1F-5CFF444C64FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTest", "src\Services\Offer\tests\IntegrationTest\IntegrationTest.csproj", "{0177ED2E-F9E6-4336-8A1F-5CFF444C64FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTest", "src\Services\Venue\tests\IntegrationTest\IntegrationTest.csproj", "{885CD444-F3AF-498E-9A67-EEEE2ACA6E64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTest", "src\Services\Venue\tests\IntegrationTest\IntegrationTest.csproj", "{885CD444-F3AF-498E-9A67-EEEE2ACA6E64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks", "src\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj", "{C0348990-CDFE-4633-BBA1-409B2060EC0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks", "src\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj", "{C0348990-CDFE-4633-BBA1-409B2060EC0C}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{7B9F6ABF-E806-44CE-9A58-32694DBEE6A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -207,6 +209,10 @@ Global
 		{C0348990-CDFE-4633-BBA1-409B2060EC0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0348990-CDFE-4633-BBA1-409B2060EC0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0348990-CDFE-4633-BBA1-409B2060EC0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B9F6ABF-E806-44CE-9A58-32694DBEE6A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B9F6ABF-E806-44CE-9A58-32694DBEE6A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B9F6ABF-E806-44CE-9A58-32694DBEE6A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B9F6ABF-E806-44CE-9A58-32694DBEE6A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
