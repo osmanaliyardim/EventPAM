@@ -50,6 +50,10 @@ public class EventPAMBase
         public const string DEFAULT_CONN_STR = "DefaultConnection";
         public const string BASE_API_PATH = "api/v{version:apiVersion}";
         public const string ELASTIC_CONFIG = "ElasticSearchConfig";
+        public const string RABBITMQ_HOST = "RabbitMQSettings:Host";
+        public const string RABBITMQ_USERNAME = "RabbitMQSettings:UserName";
+        public const string RABBITMQ_PASS = "RabbitMQSettings:Password";
+        public const string AZURE_SB_CONFIG = "AzureServiceBusSettings:ConnectionString";
     }
 
     public static class Endpoints
