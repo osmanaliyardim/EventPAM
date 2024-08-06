@@ -4,7 +4,7 @@ using EventPAM.BuildingBlocks.Core.Persistence.Paging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace EventPAM.BuildingBlocks.Core.Persistence.Repositories;
+namespace EventPAM.BuildingBlocks.Core.Persistence.EFRepositories;
 
 public class EfRepositoryBase<TEntity, TContext> : IAsyncRepository<TEntity>, IRepository<TEntity>
     where TEntity : Entity

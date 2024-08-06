@@ -1,4 +1,4 @@
-﻿namespace EventPAM.BuildingBlocks.Core.Persistence.Repositories;
+﻿namespace EventPAM.BuildingBlocks.Core.Persistence.EFRepositories;
 
 public class Entity
 {

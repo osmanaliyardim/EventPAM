@@ -3,7 +3,7 @@ using EventPAM.BuildingBlocks.Core.Persistence.Dynamic;
 using EventPAM.BuildingBlocks.Core.Persistence.Paging;
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace EventPAM.BuildingBlocks.Core.Persistence.Repositories;
+namespace EventPAM.BuildingBlocks.Core.Persistence.EFRepositories;
 
 public interface IAsyncRepository<T> : IQuery<T>
     where T : Entity
