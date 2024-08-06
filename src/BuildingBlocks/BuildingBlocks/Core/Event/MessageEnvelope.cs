@@ -1,6 +1,6 @@
 ﻿using Google.Protobuf;
 
-namespace BuildingBlocks.Core.Event;
+namespace EventPAM.BuildingBlocks.Core.Event;
 
 public class MessageEnvelope
 {
