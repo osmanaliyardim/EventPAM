@@ -54,6 +54,7 @@ public class EventPAMBase
         public const string RABBITMQ_USERNAME = "RabbitMQSettings:UserName";
         public const string RABBITMQ_PASS = "RabbitMQSettings:Password";
         public const string AZURE_SB_CONFIG = "AzureServiceBusSettings:ConnectionString";
+        public const string APP_CONFIG = "AppOptions";
     }
 
     public static class Endpoints
