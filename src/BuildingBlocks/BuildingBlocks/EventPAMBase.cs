@@ -14,6 +14,8 @@ public class EventPAMBase
         public const string IAGGREGATE_ERROR = "Try to find IAggregate";
         public const string POLLY_SERVICE_DOWN = "Service shutdown during {BreakDuration} after {RetryCount} failed retries";
         public const string POLLY_FAILED = "Request failed with {StatusCode}. Waiting {TimeSpan} before next retry. Retry attempt {RetryCount}.";
+        public const string ES_INDEX_ALREADY_EXISTS = "Elastic Index already exists";
+        public const string ES_INDEX_NULL = "Elastic Index name cannot be null or empty";
 
         // Warning Messages
         public const string PERFORMANCE_WARNING = "Performance -> ";
@@ -47,6 +49,7 @@ public class EventPAMBase
         public const string ENVIRONMENT_VARIABLE = "ASPNETCORE_ENVIRONMENT";
         public const string DEFAULT_CONN_STR = "DefaultConnection";
         public const string BASE_API_PATH = "api/v{version:apiVersion}";
+        public const string ELASTIC_CONFIG = "ElasticSearchConfig";
     }
 
     public static class Endpoints
