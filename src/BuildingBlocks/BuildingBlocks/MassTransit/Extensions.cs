@@ -1,40 +1,92 @@
 ﻿using MassTransit;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using EventPAM.BuildingBlocks.Web;
+using EventPAM.BuildingBlocks.CrossCuttingConcerns.Exceptions.Types;
 
 namespace EventPAM.BuildingBlocks.MassTransit;
 
 public static class Extensions
 {
     public static IServiceCollection AddMessageBroker
-        (this IServiceCollection services, IConfiguration configuration, Assembly? assembly = null)
+        (this IServiceCollection services, IConfiguration configuration,
+        IWebHostEnvironment env, Assembly? assembly = null)
     {
-        services.AddMassTransit(config =>
+        services.AddValidateOptions<RabbitMQOptions>();
+
+        if (env.IsEnvironment("tests"))
         {
-            config.SetKebabCaseEndpointNameFormatter();
-
-            if (assembly is not null)
-                config.AddConsumers(assembly);
-
-            // RabbitMQ Configuration
-            config.UsingRabbitMq((context, configurator) =>
+            services.AddMassTransitTestHarness(configure =>
             {
-                configurator.Host(new Uri(configuration[Configs.RABBITMQ_HOST]!), host =>
-                {
-                    host.Username(configuration[Configs.RABBITMQ_USERNAME]!);
-                    host.Password(configuration[Configs.RABBITMQ_PASS]!);
-                });
-                configurator.ConfigureEndpoints(context);
+                SetupMasstransitConfigurations(services, configure, assembly);
             });
-
-            // Azure Service Bus Configuration
-            config.UsingAzureServiceBus((context, configurator) =>
+        }
+        else
+        {
+            services.AddMassTransit(config =>
             {
-                configurator.Host(configuration[Configs.AZURE_SB_CONFIG]!);
-                configurator.ConfigureEndpoints(context);
+                services.AddMassTransit(configure => { SetupMasstransitConfigurations(services, configure, assembly); });
             });
-        });
+        }
 
         return services;
+    }
+
+    private static void SetupMasstransitConfigurations(IServiceCollection services,
+    IBusRegistrationConfigurator configure, Assembly? assembly)
+    {
+        configure.SetKebabCaseEndpointNameFormatter();
+
+        if (assembly is not null)
+            configure.AddConsumers(assembly);
+
+        configure.AddSagaStateMachines(assembly);
+        configure.AddSagas(assembly);
+        configure.AddActivities(assembly);
+
+        //configure.AddConfigureEndpointsCallback((_, cfg) =>
+        //{
+        //    if (cfg is IServiceBusReceiveEndpointConfigurator sb)
+        //    {
+        //        sb.ConfigureDeadLetterQueueDeadLetterTransport();
+        //        sb.ConfigureDeadLetterQueueErrorTransport();
+        //    }
+        //});  
+
+        configure.UsingRabbitMq((context, configurator) =>
+        {
+            var rabbitMqOptions = services.GetOptions<RabbitMQOptions>(nameof(RabbitMQOptions));
+
+            configurator.Host(rabbitMqOptions?.Host, rabbitMqOptions?.Port ?? 5672, "/", hc =>
+            {
+                hc.Username(rabbitMqOptions?.UserName!);
+                hc.Password(rabbitMqOptions?.Password!);
+            });
+
+            configurator.ConfigureEndpoints(context);
+
+            configurator.UseMessageRetry(AddRetryConfiguration);
+        });
+
+        //configure.UsingAzureServiceBus((context, config) =>
+        //{
+        //    var azureServiceBusOptions = services.GetOptions<ASBOptions>(nameof(ASBOptions));
+
+        //    config.Host(new Uri(azureServiceBusOptions.ConnectionString));
+
+        //    config.ConfigureEndpoints(context);
+        //});
+    }
+
+    private static void AddRetryConfiguration(IRetryConfigurator retryConfigurator)
+    {
+        retryConfigurator.Exponential(
+                3,
+                TimeSpan.FromMilliseconds(200),
+                TimeSpan.FromMinutes(120),
+                TimeSpan.FromMilliseconds(200))
+            .Ignore<ValidationException>(); // don't retry if we have invalid data and message goes to _error queue masstransit
     }
 }

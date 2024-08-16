@@ -29,6 +29,7 @@ public static class IQueryablePaginateExtensions
                 Items = items,
                 Pages = (int)Math.Ceiling(count / (double)size)
             };
+
         return list;
     }
 
@@ -50,6 +51,7 @@ public static class IQueryablePaginateExtensions
                 Items = items,
                 Pages = (int)Math.Ceiling(count / (double)size)
             };
+
         return list;
     }
 }

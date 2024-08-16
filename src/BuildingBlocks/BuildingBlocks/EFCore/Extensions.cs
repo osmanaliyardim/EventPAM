@@ -47,7 +47,7 @@ public static class Extensions
     {
         MigrateDatabaseAsync<TContext>(app.ApplicationServices).GetAwaiter().GetResult();
 
-        if (!env.IsEnvironment("test"))
+        if (!env.IsEnvironment("tests"))
         {
             SeedDataAsync(app.ApplicationServices).GetAwaiter().GetResult();
         }

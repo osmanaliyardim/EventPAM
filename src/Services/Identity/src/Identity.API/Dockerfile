@@ -10,6 +10,8 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Services/Identity/src/Identity.API/Identity.API.csproj", "src/Services/Identity/src/Identity.API/"]
+COPY ["src/Services/Identity/src/Identity/Identity.csproj", "src/Services/Identity/src/Identity/"]
+COPY ["src/BuildingBlocks/BuildingBlocks/BuildingBlocks.csproj", "src/BuildingBlocks/BuildingBlocks/"]
 RUN dotnet restore "./src/Services/Identity/src/Identity.API/Identity.API.csproj"
 COPY . .
 WORKDIR "/src/src/Services/Identity/src/Identity.API"

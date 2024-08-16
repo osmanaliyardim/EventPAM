@@ -22,6 +22,9 @@ public static class CorrelationExtensions
     {
         context.Items.TryGetValue(CorrelationId, out var correlationId);
 
-        return string.IsNullOrEmpty(correlationId?.ToString()) ? Guid.NewGuid() : new Guid(correlationId.ToString()!);
+        return string
+            .IsNullOrEmpty(correlationId?.ToString()) 
+                ? Guid.NewGuid() 
+                : new Guid(correlationId.ToString()!);
     }
 }

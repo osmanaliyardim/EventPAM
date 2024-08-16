@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using EventPAM.BuildingBlocks.Core.Model;
 using EventPAM.BuildingBlocks.Core.Persistence.Dynamic;
 using EventPAM.BuildingBlocks.Core.Persistence.Paging;
 using Microsoft.EntityFrameworkCore;
@@ -7,62 +8,64 @@ using Microsoft.EntityFrameworkCore.Query;
 namespace EventPAM.BuildingBlocks.Core.Persistence.EFRepositories;
 
 public class EfRepositoryBase<TEntity, TContext> : IAsyncRepository<TEntity>, IRepository<TEntity>
-    where TEntity : Entity
+    where TEntity : Entity<Guid>
     where TContext : DbContext
 {
-    protected readonly TContext Context;
+    protected readonly TContext _context;
+    private readonly DbSet<TEntity> _dbSet;
 
     public EfRepositoryBase(TContext context)
     {
-        Context = context;
+        _context = context;
+        _dbSet = context.Set<TEntity>();
     }
 
-    public IQueryable<TEntity> Query() => Context.Set<TEntity>();
+    public IQueryable<TEntity> Query() => _context.Set<TEntity>();
 
     public async Task<TEntity> AddAsync(TEntity entity)
     {
-        await Context.AddAsync(entity);
-        await Context.SaveChangesAsync();
+        await _dbSet.AddAsync(entity);
+        await _context.SaveChangesAsync();
 
         return entity;
     }
 
     public async Task<IList<TEntity>> AddRangeAsync(IList<TEntity> entities)
     {
-        await Context.AddRangeAsync(entities);
-        await Context.SaveChangesAsync();
+        await _dbSet.AddRangeAsync(entities);
+        await _context.SaveChangesAsync();
 
         return entities;
     }
 
     public async Task<TEntity> UpdateAsync(TEntity entity)
     {
-        Context.Update(entity);
-        await Context.SaveChangesAsync();
+        _dbSet.Update(entity);
+        await _context.SaveChangesAsync();
 
         return entity;
     }
 
     public async Task<IList<TEntity>> UpdateRangeAsync(IList<TEntity> entities)
     {
-        Context.UpdateRange(entities);
-        await Context.SaveChangesAsync();
+        _dbSet.UpdateRange(entities);
+        await _context.SaveChangesAsync();
 
         return entities;
     }
 
     public async Task<TEntity> DeleteAsync(TEntity entity)
     {
-        Context.Remove(entity);
-        await Context.SaveChangesAsync();
+        _dbSet.Remove(entity);
+        await _context.SaveChangesAsync();
 
         return entity;
     }
 
     public async Task<IList<TEntity>> DeleteRangeAsync(IList<TEntity> entities)
     {
-        Context.RemoveRange(entities);
-        Context.SaveChanges();
+        _dbSet.RemoveRange(entities);
+        await _context.SaveChangesAsync();
 
         return entities;
     }
@@ -78,6 +81,7 @@ public class EfRepositoryBase<TEntity, TContext> : IAsyncRepository<TEntity>, IR
     )
     {
         IQueryable<TEntity> queryable = Query();
+
         if (!enableTracking)
             queryable = queryable.AsNoTracking();
         if (include != null)
@@ -98,6 +102,7 @@ public class EfRepositoryBase<TEntity, TContext> : IAsyncRepository<TEntity>, IR
     )
     {
         IQueryable<TEntity> queryable = Query();
+
         if (!enableTracking)
             queryable = queryable.AsNoTracking();
         if (include != null)
@@ -117,6 +122,7 @@ public class EfRepositoryBase<TEntity, TContext> : IAsyncRepository<TEntity>, IR
     )
     {
         IQueryable<TEntity> queryable = Query().ToDynamic(dynamic);
+
         if (!enableTracking)
             queryable = queryable.AsNoTracking();
         if (include != null)
@@ -134,6 +140,7 @@ public class EfRepositoryBase<TEntity, TContext> : IAsyncRepository<TEntity>, IR
     )
     {
         IQueryable<TEntity> queryable = Query();
+
         if (predicate is not null)
             queryable = queryable.Where(predicate);
         if (!enableTracking)
@@ -144,48 +151,48 @@ public class EfRepositoryBase<TEntity, TContext> : IAsyncRepository<TEntity>, IR
 
     public TEntity Add(TEntity entity)
     {
-        Context.Add(entity);
-        Context.SaveChanges();
+        _dbSet.Add(entity);
+        _context.SaveChanges();
 
         return entity;
     }
 
     public IList<TEntity> AddRange(IList<TEntity> entities)
     {
-        Context.AddRange(entities);
-        Context.SaveChanges();
+        _dbSet.AddRange(entities);
+        _context.SaveChanges();
 
         return entities;
     }
 
     public TEntity Update(TEntity entity)
     {
-        Context.Update(entity);
-        Context.SaveChanges();
+        _dbSet.Update(entity);
+        _context.SaveChanges();
 
         return entity;
     }
 
     public IList<TEntity> UpdateRange(IList<TEntity> entities)
     {
-        Context.UpdateRange(entities);
-        Context.SaveChanges();
+        _dbSet.UpdateRange(entities);
+        _context.SaveChanges();
 
         return entities;
     }
 
     public TEntity Delete(TEntity entity)
     {
-        Context.Remove(entity);
-        Context.SaveChanges();
+        _dbSet.Remove(entity);
+        _context.SaveChanges();
 
         return entity;
     }
 
     public IList<TEntity> DeleteRange(IList<TEntity> entities)
     {
-        Context.RemoveRange(entities);
-        Context.SaveChanges();
+        _dbSet.RemoveRange(entities);
+        _context.SaveChanges();
 
         return entities;
     }
@@ -197,6 +204,7 @@ public class EfRepositoryBase<TEntity, TContext> : IAsyncRepository<TEntity>, IR
     )
     {
         IQueryable<TEntity> queryable = Query();
+
         if (!enableTracking)
             queryable = queryable.AsNoTracking();
         if (include != null)
@@ -215,6 +223,7 @@ public class EfRepositoryBase<TEntity, TContext> : IAsyncRepository<TEntity>, IR
     )
     {
         IQueryable<TEntity> queryable = Query();
+
         if (!enableTracking)
             queryable = queryable.AsNoTracking();
         if (include != null)
@@ -237,6 +246,7 @@ public class EfRepositoryBase<TEntity, TContext> : IAsyncRepository<TEntity>, IR
     )
     {
         IQueryable<TEntity> queryable = Query().ToDynamic(dynamic);
+
         if (!enableTracking)
             queryable = queryable.AsNoTracking();
         if (include != null)
@@ -250,6 +260,7 @@ public class EfRepositoryBase<TEntity, TContext> : IAsyncRepository<TEntity>, IR
     public bool Any(Expression<Func<TEntity, bool>>? predicate = null, bool enableTracking = true)
     {
         IQueryable<TEntity> queryable = Query();
+
         if (predicate is not null)
             queryable = queryable.Where(predicate);
         if (!enableTracking)

@@ -1,8 +1,242 @@
 version: '3.4'
 
 services:
-  web.apigateway:
-    image: ${DOCKER_REGISTRY-}webapigateway
-    build:
-      context: .
-      dockerfile: src/ApiGateways/WebApiGateway/Web.ApiGateway/Dockerfile
+  #######################################################
+  #  Postgres
+  #######################################################
+  postgres:
+   image: postgres:latest
+   container_name: postgres
+   restart: unless-stopped
+   ports:
+     - '5432:5432'
+   environment:
+     - POSTGRES_USER=postgres
+     - POSTGRES_PASSWORD=postgres
+   command:
+     - "postgres"
+     - "-c"
+     - "wal_level=logical"
+     - "-c"
+     - "max_prepared_transactions=10"
+   networks:
+     - eventpam
+
+  #######################################################
+  #  Redis
+  #######################################################
+  redis:
+    image: redis
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - eventpam
+
+  #######################################################
+  #  Rabbitmq
+  #######################################################
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:management
+    restart: unless-stopped
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - eventpam
+
+  #######################################################
+  #  Mongo
+  #######################################################
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: unless-stopped
+    # environment:
+    #   - MONGO_INITDB_ROOT_USERNAME=root
+    #   - MONGO_INITDB_ROOT_PASSWORD=secret
+    networks:
+      - eventpam
+    ports:
+      - 27017:27017
+    # volumes:
+    #   - mongo_data:/data/db
+
+  #######################################################
+  #  EventStoreDB
+  #######################################################
+  eventstore:
+    container_name: eventstore
+    image: eventstore/eventstore:latest
+    restart: unless-stopped
+    environment:
+      - EVENTSTORE_CLUSTER_SIZE=1
+      - EVENTSTORE_RUN_PROJECTIONS=All
+      - EVENTSTORE_START_STANDARD_PROJECTIONS=true
+      - EVENTSTORE_INT_TCP_PORT=1113
+      - EVENTSTORE_HTTP_PORT=2113
+      - EVENTSTORE_INSECURE=true
+      - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
+    ports:
+      - '1113:1113'
+      - '2113:2113'
+    networks:
+      - eventpam
+
+  #######################################################
+  #  Elastic Search
+  #######################################################
+  elasticsearch:
+    container_name: elasticsearch
+    image: elasticsearch:7.17.9
+    restart: unless-stopped
+    ports:
+      - 9200:9200
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    environment:
+      - xpack.monitoring.enabled=true
+      - xpack.watcher.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+    networks:
+      - eventpam
+
+  # #######################################################
+  # #  Kibana
+  # #######################################################
+  # kibana:
+  #   container_name: kibana
+  #   image: kibana:7.17.9
+  #   restart: unless-stopped
+  #   ports:
+  #     - 5601:5601
+  #   depends_on:
+  #     - elasticsearch
+  #   environment:
+  #     - ELASTICSEARCH_URL=elasticsearch:9200
+  #   networks:
+  #     - eventpam
+
+  # #######################################################
+  # #  Prometheus
+  # #######################################################
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: prometheus
+  #   restart: unless-stopped
+  #   ports:
+  #     - "9090:9090"
+  #   environment:
+  #     - TZ=UTC
+  #   volumes:
+  #     - ./monitoring/prom/prometheus.yml:/etc/prometheus/prometheus.yml
+  #   networks:
+  #     - eventpam
+
+  # #######################################################
+  # #  Grafana
+  # #######################################################
+  # grafana:
+  #   image: grafana/grafana
+  #   container_name: grafana
+  #   restart: unless-stopped
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./monitoring/grafana-data/data:/var/lib/grafana
+  #   networks:
+  #     - eventpam     
+
+  # #######################################################
+  # #  Node Exporter
+  # #######################################################
+  # node_exporter:
+  #   image: quay.io/prometheus/node-exporter:latest
+  #   container_name: node_exporter
+  #   restart: unless-stopped
+  #   command:
+  #     - '--path.rootfs=/host'
+  #   pid: host
+  #   volumes:
+  #     - '/:/host:ro,rslave'
+  #   networks:
+  #     - eventpam
+
+  # #######################################################
+  # #  Cadvisor
+  # #######################################################
+  # cadvisor:
+  #   image: gcr.io/cadvisor/cadvisor:latest
+  #   container_name: cadvisor
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8080:8080"
+  #   volumes:
+  #     - /:/rootfs:ro
+  #     - /var/run:/var/run:ro
+  #     - /sys:/sys:ro
+  #     - /var/lib/docker/:/var/lib/docker:ro
+  #     - /dev/disk/:/dev/disk:ro
+  #   devices:
+  #     - /dev/kmsg
+  #   networks:
+  #     - eventpam 
+
+  # ######################################################
+  # #  Gateway Service
+  # ######################################################
+  # gateway-service:
+  #   image: ${DOCKER_REGISTRY-}webapigateway
+  #   build:
+  #     args:
+  #       Version: "1"
+  #     context: .
+  #     dockerfile: src/ApiGateways/WebApiGateway/Web.ApiGateway/Dockerfile
+  #   container_name: gateway-service
+  #   ports:
+  #     - "6000:8080"
+  #     - "6060:8081"
+  #   volumes:
+  #     - ~/.aspnet/https:/https:ro
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_URLS=https://+;http://+
+  #     - ASPNETCORE_HTTPS_PORT=8081
+  #     - ASPNETCORE_HTTP_PORT=8080
+  #     - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+  #     - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+  #   networks:
+  #    - eventpam
+
+  # #######################################################
+  # #  Identity Service
+  # #######################################################
+  # identity-service:
+  #   image: ${DOCKER_REGISTRY-}identityapi
+  #   build:
+  #     context: .
+  #     dockerfile: src/Services/Identity/src/Identity.API/Dockerfile
+  #   container_name: identity-service
+  #   ports:
+  #     - 6001:8080
+  #     - 6061:8081
+  #   volumes:
+  #     - ~/.aspnet/https:/https:ro
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_URLS=https://+;http://+
+  #     - ASPNETCORE_HTTPS_PORT=8081
+  #     - ASPNETCORE_HTTP_PORT=8080
+  #     - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+  #     - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+  #   networks:
+  #     - eventpam
+
+networks:
+  eventpam:
+
+volumes:
+  elasticsearch-data:

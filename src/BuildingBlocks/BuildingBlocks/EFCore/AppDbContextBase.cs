@@ -15,13 +15,15 @@ public abstract class AppDbContextBase : DbContext, IDbContext
     private readonly ILogger<AppDbContextBase>? _logger;
     private IDbContextTransaction _currentTransaction = default!;
 
-    protected AppDbContextBase(DbContextOptions options, ICurrentUserProvider? currentUserProvider = null, ILogger<AppDbContextBase>? logger = null) :
-        base(options)
+    protected AppDbContextBase(
+        DbContextOptions options, 
+        ICurrentUserProvider? currentUserProvider = null, 
+        ILogger<AppDbContextBase>? logger = null) 
+            : base(options)
     {
         _currentUserProvider = currentUserProvider;
         _logger = logger;
     }
-
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

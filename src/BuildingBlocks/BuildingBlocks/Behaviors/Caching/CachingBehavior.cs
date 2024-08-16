@@ -31,13 +31,13 @@ public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
         }
         else
         {
-            response = await getResponseAndAddToCache(request, next, cancellationToken);
+            response = await GetResponseAndAddToCache(request, next, cancellationToken);
         }
 
         return response;
     }
 
-    private async Task<TResponse> getResponseAndAddToCache(
+    private async Task<TResponse> GetResponseAndAddToCache(
         TRequest request,
         RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken

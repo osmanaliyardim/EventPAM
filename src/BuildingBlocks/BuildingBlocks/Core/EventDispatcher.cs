@@ -27,7 +27,6 @@ public sealed class EventDispatcher : IEventDispatcher
         _httpContextAccessor = httpContextAccessor;
     }
 
-
     public async Task SendAsync<T>(IReadOnlyList<T> events, Type type = null!,
         CancellationToken cancellationToken = default)
         where T : IEvent
@@ -43,8 +42,7 @@ public sealed class EventDispatcher : IEventDispatcher
                 foreach (var integrationEvent in integrationEvents)
                 {
                     await _persistMessageProcessor.PublishMessageAsync(
-                        new MessageEnvelope(integrationEvent, SetHeaders()!),
-                        cancellationToken);
+                        new MessageEnvelope(integrationEvent, SetHeaders()!), cancellationToken);
                 }
             }
 
@@ -80,8 +78,7 @@ public sealed class EventDispatcher : IEventDispatcher
     public async Task SendAsync<T>(T @event, Type type = null!,
         CancellationToken cancellationToken = default)
         where T : IEvent =>
-        await SendAsync(new[] {@event}, type, cancellationToken);
-
+            await SendAsync(new[] {@event}, type, cancellationToken);
 
     private Task<IReadOnlyList<IIntegrationEvent>> MapDomainEventToIntegrationEventAsync(
         IReadOnlyList<IDomainEvent> events)
@@ -110,7 +107,6 @@ public sealed class EventDispatcher : IEventDispatcher
 
         return Task.FromResult<IReadOnlyList<IIntegrationEvent>>(integrationEvents);
     }
-
 
     private Task<IReadOnlyList<IInternalCommand>> MapDomainEventToInternalCommandAsync(
         IReadOnlyList<IDomainEvent> events)
@@ -151,13 +147,15 @@ public sealed class EventDispatcher : IEventDispatcher
         }
     }
 
-    private IDictionary<string, object> SetHeaders()
+    private Dictionary<string, object> SetHeaders()
     {
         var headers = new Dictionary<string, object>
         {
             { "CorrelationId", _httpContextAccessor?.HttpContext?.GetCorrelationId()! },
             { "UserId", _httpContextAccessor?.HttpContext?.User?.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value! },
-            { "UserName", _httpContextAccessor?.HttpContext?.User?.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value! }
+            { "Name", _httpContextAccessor?.HttpContext?.User?.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value! },
+            { "Role", _httpContextAccessor?.HttpContext?.User?.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value! },
+            { "Email", _httpContextAccessor?.HttpContext?.User?.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value! }
         };
 
         return headers;

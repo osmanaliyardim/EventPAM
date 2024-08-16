@@ -13,7 +13,7 @@ public class MailKitMailService : IMailService
 
     public MailKitMailService(IConfiguration configuration)
     {
-        _mailSettings = configuration.GetSection("MailSettings").Get<MailSettings>()!;
+        _mailSettings = configuration.GetSection(Configs.MAIL_SETTINGS).Get<MailSettings>()!;
         _signer = null;
     }
 

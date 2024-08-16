@@ -5,6 +5,27 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>EventPAM.Customer</RootNamespace>
+    <UserSecretsId>c8e6226d-a941-4ab7-a8a1-865a0eb6f57f</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="GrpcServer\Protos\customer.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="Grpc.AspNetCore" Version="2.57.0" />
+	<PackageReference Include="Grpc.Tools" Version="2.65.0">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="GrpcServer\Protos\customer.proto" />
+  </ItemGroup>
 
 </Project>

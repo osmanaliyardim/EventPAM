@@ -7,4 +7,28 @@
     <RootNamespace>EventPAM.Ticketing</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Grpc.Net.ClientFactory" Version="2.65.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.65.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Protobuf Include="GrpcClient\Protos\event.proto" GrpcServices="Client" />
+		<Protobuf Include="GrpcClient\Protos\customer.proto" GrpcServices="Client" />
+		<Folder Include="GrpcClient\Protos" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>Integration.Test</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+
 </Project>

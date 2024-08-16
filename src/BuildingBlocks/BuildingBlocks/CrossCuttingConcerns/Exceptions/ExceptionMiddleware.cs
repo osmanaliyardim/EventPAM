@@ -37,6 +37,7 @@ public class ExceptionMiddleware
     {
         response.ContentType = "application/json";
         _httpExceptionHandler.Response = response;
+
         return _httpExceptionHandler.HandleExceptionAsync(exception);
     }
 
@@ -57,6 +58,7 @@ public class ExceptionMiddleware
             };
 
         _loggerService.Info(JsonSerializer.Serialize(logDetail));
+
         return Task.CompletedTask;
     }
 }

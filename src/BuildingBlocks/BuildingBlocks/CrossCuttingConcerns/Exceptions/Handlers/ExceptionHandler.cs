@@ -18,6 +18,12 @@ public abstract class ExceptionHandler
         if (exception is NotFoundException notFoundException)
             return HandleException(notFoundException);
 
+        if (exception is BadRequestException badRequestException)
+            return HandleException(badRequestException);
+
+        if (exception is AggregateNotFoundException aggregateNotFoundException)
+            return HandleException(aggregateNotFoundException);
+
         return HandleException(exception);
     }
 
@@ -28,6 +34,10 @@ public abstract class ExceptionHandler
     protected abstract Task HandleException(AuthorizationException authorizationException);
 
     protected abstract Task HandleException(NotFoundException notFoundException);
+
+    protected abstract Task HandleException(BadRequestException badRequestException);
+
+    protected abstract Task HandleException(AggregateNotFoundException aggregateNotFoundException);
 
     protected abstract Task HandleException(Exception exception);
 }
