@@ -10,6 +10,8 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Services/Event/src/Event.API/Event.API.csproj", "src/Services/Event/src/Event.API/"]
+COPY ["src/Services/Event/src/Event/Event.csproj", "src/Services/Event/src/Event/"]
+COPY ["src/BuildingBlocks/BuildingBlocks/BuildingBlocks.csproj", "src/BuildingBlocks/BuildingBlocks/"]
 RUN dotnet restore "./src/Services/Event/src/Event.API/Event.API.csproj"
 COPY . .
 WORKDIR "/src/src/Services/Event/src/Event.API"

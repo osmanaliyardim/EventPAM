@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option csharp_namespace = "EventPAM.Customer.GrpcServer.Protos";
+
+package customer;
+
+service CustomerGrpcService {
+  rpc GetById (GetByIdRequest) returns (GetCustomerByIdResult);
+}
+
+message GetByIdRequest {
+  string Id = 1;
+}
+
+message GetCustomerByIdResult {
+   CustomerResponse CustomerDto = 1;
+}
+
+message CustomerResponse {
+  string Id = 1;
+  string Name = 2;
+  CustomerType CustomerType = 3;
+  int32 Age = 4;
+  string Email = 5;
+}
+
+enum CustomerType {
+    CUSTOMER_TYPE_UNKNOWN = 0;
+    CUSTOMER_TYPE_MALE = 1;
+    CUSTOMER_TYPE_FEMALE = 2;
+    CUSTOMER_TYPE_CHILD = 3;
+}
+

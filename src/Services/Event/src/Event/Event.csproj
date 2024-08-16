@@ -7,4 +7,23 @@
     <RootNamespace>EventPAM.Event</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+	<PackageReference Include="Grpc.AspNetCore" Version="2.57.0" />
+	<PackageReference Include="Grpc.Tools" Version="2.65.0">
+		<PrivateAssets>all</PrivateAssets>
+		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<Protobuf Include="GrpcServer\Protos\event.proto">
+		<GrpcServices>Both</GrpcServices>
+		<Link>Protos\event.proto</Link>
+	</Protobuf>
+  </ItemGroup>
+
 </Project>

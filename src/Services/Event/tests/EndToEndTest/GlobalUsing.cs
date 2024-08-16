@@ -1,0 +1,9 @@
+﻿global using AutoBogus;
+global using FluentAssertions;
+global using EventPAM.Event.Data;
+global using EventPAM.BuildingBlocks.TestBase;
+global using EventPAM.Event.API;
+global using EventPAM.EndToEndTest.Event.Fakes;
+global using EndToEnd.Test.Routes;
+global using System.Net;
+global using System.Net.Http.Json;

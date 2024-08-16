@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace ventPAM.BuildingBlocks.CrossCuttingConcerns.Security.Extensions;
+namespace EventPAM.BuildingBlocks.CrossCuttingConcerns.Security.Extensions;
 
 public static class ClaimsPrincipalExtensions
 {

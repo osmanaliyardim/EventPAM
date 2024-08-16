@@ -13,8 +13,14 @@
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="xunit" Version="2.5.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+	<PackageReference Include="Xunit" Version="2.9.0" />
+	<PackageReference Include="xunit.runner.visualstudio" Version="2.8.2"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj" />
+    <ProjectReference Include="..\..\src\Customer.API\Customer.API.csproj" />
+    <ProjectReference Include="..\..\src\Customer\Customer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

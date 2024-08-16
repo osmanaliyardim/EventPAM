@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+option csharp_namespace = "EventPAM.Event.GrpcServer.Protos";
+
+package event;
+
+import "google/protobuf/timestamp.proto";
+
+service EventGrpcService {
+
+  rpc GetById (GetByIdRequest) returns (GetEventByIdResult);
+  rpc GetAvailableSeats (GetAvailableSeatsRequest) returns (GetAvailableSeatsResult);
+  rpc ReserveSeat (ReserveSeatRequest) returns (ReserveSeatResult);
+}
+
+message GetByIdRequest {
+  string Id = 1;
+}
+
+message GetEventByIdResult{
+  EventResponse EventDto = 1;
+}
+
+message GetAvailableSeatsResult{
+  repeated SeatDtoResponse SeatDtos = 1;
+}
+
+message ReserveSeatResult{
+  string Id = 1;
+}
+
+message EventResponse {
+  string Id = 1;
+  string EventNumber = 2;
+  string VenueId = 3;
+  double DurationMinutes = 4;
+  google.protobuf.Timestamp EventDate = 5;
+  EventStatus Status = 6;
+  double Price = 7;
+  string EventId = 8;
+}
+
+message GetAvailableSeatsRequest {
+  string EventId = 1;
+}
+
+message SeatDtoResponse {
+  string Id = 1;
+  string SeatNumber = 2;
+  SeatClass Class = 3;
+  string EventId = 4;
+}
+
+message ReserveSeatRequest {
+  string EventId = 1;
+  string SeatNumber = 2;
+}
+
+enum EventStatus {
+  EVENT_STATUS_UNKNOWN = 0;
+  EVENT_STATUS_INACTION = 1;
+  EVENT_STATUS_DELAY = 2;
+  EVENT_STATUS_CANCELED = 3;
+  EVENT_STATUS_COMPLETED = 4;
+}
+
+enum SeatClass {
+  SEAT_CLASS_UNKNOWN = 0;
+  SEAT_CLASS_STANDARD = 1;
+  SEAT_CLASS_PREMIUM = 2;
+}

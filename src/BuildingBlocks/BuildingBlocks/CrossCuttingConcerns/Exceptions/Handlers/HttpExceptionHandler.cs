@@ -46,6 +46,22 @@ public class HttpExceptionHandler : ExceptionHandler
         return Response.WriteAsync(details);
     }
 
+    protected override Task HandleException(BadRequestException badRequestException)
+    {
+        Response.StatusCode = StatusCodes.Status400BadRequest;
+        string details = new BadRequestProblemDetails(badRequestException.Message).AsJson();
+
+        return Response.WriteAsync(details);
+    }
+
+    protected override Task HandleException(AggregateNotFoundException aggregateNotFoundException)
+    {
+        Response.StatusCode = StatusCodes.Status404NotFound;
+        string details = new BadRequestProblemDetails(aggregateNotFoundException.Message).AsJson();
+
+        return Response.WriteAsync(details);
+    }
+
     protected override Task HandleException(Exception exception)
     {
         Response.StatusCode = StatusCodes.Status500InternalServerError;

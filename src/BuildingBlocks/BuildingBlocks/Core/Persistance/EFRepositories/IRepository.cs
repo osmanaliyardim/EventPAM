@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using EventPAM.BuildingBlocks.Core.Model;
 using EventPAM.BuildingBlocks.Core.Persistence.Dynamic;
 using EventPAM.BuildingBlocks.Core.Persistence.Paging;
 using Microsoft.EntityFrameworkCore.Query;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Query;
 namespace EventPAM.BuildingBlocks.Core.Persistence.EFRepositories;
 
 public interface IRepository<T> : IQuery<T>
-    where T : Entity
+    where T : Entity<Guid>
 {
     T? Get(
         Expression<Func<T, bool>> predicate,

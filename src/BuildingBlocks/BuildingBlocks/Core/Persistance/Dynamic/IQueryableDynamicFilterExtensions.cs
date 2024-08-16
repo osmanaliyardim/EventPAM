@@ -29,6 +29,7 @@ public static class IQueryableDynamicFilterExtensions
             query = Filter(query, dynamicQuery.Filter);
         if (dynamicQuery.Sort is not null && dynamicQuery.Sort.Any())
             query = Sort(query, dynamicQuery.Sort);
+
         return query;
     }
 
