@@ -28,7 +28,7 @@ public class GetCustomerByIdEndpoint : IMinimalEndpoint
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {
         builder.MapGet($"{EndpointConfig.BaseApiPath}/customer/{{id}}",
-                async ([AsParameters] Guid id, IMediator mediator, CancellationToken cancellationToken) =>
+                async (Guid id, IMediator mediator, CancellationToken cancellationToken) =>
                 {
                     var result = await mediator.Send(new GetCustomerById(id), cancellationToken);
 
