@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using Duende.IdentityServer.EntityFramework.Entities;
 using EventPAM.BuildingBlocks.Core.CQRS;
 using EventPAM.BuildingBlocks.Web;
 using EventPAM.Identity.Dtos;
@@ -37,15 +38,15 @@ public class GeUserByIdEndpoint : IMinimalEndpoint
 
                 return Results.Ok(response);
             })
-        //.RequireAuthorization(nameof(ApiScope))
-        .WithName("GetUserByIdQuery")
-        .WithApiVersionSet(builder.NewApiVersionSet("Identity").Build())
-        .Produces<GetUsertByIdResponse>()
-        .ProducesProblem(StatusCodes.Status400BadRequest)
-        .WithSummary("Get User By Id")
-        .WithDescription("Get User By Id")
-        .WithOpenApi()
-        .HasApiVersion(1.0);
+            .RequireAuthorization(nameof(ApiScope))
+            .WithName("GetUserByIdQuery")
+            .WithApiVersionSet(builder.NewApiVersionSet("Identity").Build())
+            .Produces<GetUsertByIdResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .WithSummary("Get User By Id")
+            .WithDescription("Get User By Id")
+            .WithOpenApi()
+            .HasApiVersion(1.0);
 
         return builder;
     }

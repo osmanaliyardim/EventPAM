@@ -1,10 +1,9 @@
 ﻿using Asp.Versioning;
-using Duende.IdentityServer.Models;
+using EventPAM.BuildingBlocks.CrossCuttingConcerns.Security.Entities;
 using EventPAM.BuildingBlocks.CrossCuttingConcerns.Security.Extensions;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Primitives;
 
 namespace EventPAM.BuildingBlocks.Web;
 
@@ -23,15 +22,23 @@ public abstract class BaseController : ControllerBase
 
     protected string? GetIpAddress(IHttpContextAccessor context)
     {
-        if (context.HttpContext!.Request.Headers.ContainsKey("X-Forwarded-For"))
-            return context.HttpContext.Request.Headers["X-Forwarded-For"];
+        if (Request.Headers.ContainsKey("X-Forwarded-For"))
+            return Request.Headers["X-Forwarded-For"];
 
-        return context.HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString();
+        return context.HttpContext!.Connection.RemoteIpAddress?.MapToIPv4().ToString();
     }
 
-    protected int GetUserIdFromRequest()
+    protected string? GetRefreshTokenFromCookies() => Request.Cookies["refreshToken"];
+
+    protected void SetRefreshTokenToCookies(RefreshToken refreshToken)
     {
-        int userId = HttpContext.User.GetUserId();
+        CookieOptions cookieOptions = new() { HttpOnly = true, Expires = DateTime.UtcNow.AddDays(7) };
+        Response.Cookies.Append(key: "refreshToken", refreshToken.Token, cookieOptions);
+    }
+
+    protected Guid GetUserIdFromRequest()
+    {
+        var userId = HttpContext.User.GetUserId();
         
         return userId;
     }

@@ -13,8 +13,6 @@ public record EnableOtpAuthenticatorCommand(Guid UserId) : IRequest<EnableOtpAut
 
 public record EnableOtpAuthenticatorResult(string SecretKey);
 
-public record EnableOtpAuthenticatorRequest(Guid UserId);
-
 public record EnabledOtpAuthenticatorResponse(string SecretKey);
 
 public class EnableOtpAuthenticatorCommandValidator : AbstractValidator<EnableOtpAuthenticatorCommand>
@@ -28,15 +26,14 @@ public class EnableOtpAuthenticatorCommandValidator : AbstractValidator<EnableOt
     }
 }
 
-public class EnableEmailAuthenticatorEndpoint : IMinimalEndpoint
+public class EnableOtpAuthenticatorEndpoint : BaseController, IMinimalEndpoint
 {
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {
         builder.MapGet($"{EndpointConfig.BaseApiPath}/identity/enable-otp-authenticator",
-            async ([AsParameters] EnableOtpAuthenticatorRequest request, IMediator mediator,
-            IMapper mapper, CancellationToken cancellationToken) =>
+            async ( IMediator mediator, IMapper mapper, CancellationToken cancellationToken) =>
             {
-                var command = mapper.Map<EnableOtpAuthenticatorCommand>(request);
+                var command = new EnableOtpAuthenticatorCommand(GetUserIdFromRequest());
 
                 var result = await mediator.Send(command, cancellationToken);
 
@@ -45,10 +42,9 @@ public class EnableEmailAuthenticatorEndpoint : IMinimalEndpoint
                 return Results.Ok(response);
             }
         )
-        //.RequireAuthorization(nameof(ApiScope))
         .WithName("EnableOtpAuthenticator")
         .WithApiVersionSet(builder.NewApiVersionSet("Identity").Build())
-        .Produces<EnabledOtpAuthenticatorResponse>()
+        .Produces<EnabledOtpAuthenticatorResponse>(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Enable OTP Authenticator")
         .WithDescription("Enable OTP Authenticator")

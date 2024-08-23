@@ -75,34 +75,29 @@ public class LoginCommandValidator : AbstractValidator<LoginCommand>
     }
 }
 
-public class LoginEndpoint : IMinimalEndpoint
+public class LoginEndpoint : BaseController, IMinimalEndpoint
 {
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {
         builder.MapPost($"{EndpointConfig.BaseApiPath}/identity/login-user",
             async (LoginRequest request, IMediator mediator, IMapper mapper,
-                HttpContext context, CancellationToken cancellationToken) =>
+                IHttpContextAccessor context, CancellationToken cancellationToken) =>
             {
                 var command = mapper.Map<LoginCommand>(request);
 
                 var result = await mediator.Send(command, cancellationToken);
 
                 if (result.RefreshToken is not null)
-                {
-                    var cookieOptions = new CookieOptions() { HttpOnly = true, Expires = DateTime.UtcNow.AddDays(7) };
-                    
-                    context.Response.Cookies.Append(key: "refreshToken", result.RefreshToken.Token, cookieOptions);
-                }
+                    SetRefreshTokenToCookies(result.RefreshToken);
 
                 var response = result.Adapt<LoggedResponse>();
 
                 return Results.Ok(response.ToHttpResponse());
             }
         )
-        //.RequireAuthorization()
         .WithName("LoginUser")
         .WithApiVersionSet(builder.NewApiVersionSet("Identity").Build())
-        .Produces<LoggedResponse>()
+        .Produces<LoggedResponse>(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Login User")
         .WithDescription("Login User")

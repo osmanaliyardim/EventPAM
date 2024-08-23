@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using Duende.IdentityServer.EntityFramework.Entities;
 using EventPAM.BuildingBlocks.Core.CQRS;
 using EventPAM.BuildingBlocks.Web;
 using EventPAM.Identity.Dtos;
@@ -29,15 +30,15 @@ public class GeUserByNameEndpoint : IMinimalEndpoint
 
                 return Results.Ok(response);
             })
-        //.RequireAuthorization(nameof(ApiScope))
-        .WithName("GetUserByEmailQuery")
-        .WithApiVersionSet(builder.NewApiVersionSet("Identity").Build())
-        .Produces<GetUserByEmailResponse>()
-        .ProducesProblem(StatusCodes.Status400BadRequest)
-        .WithSummary("Get User By Email")
-        .WithDescription("Get User By Email")
-        .WithOpenApi()
-        .HasApiVersion(1.0);
+            .RequireAuthorization(nameof(ApiScope))
+            .WithName("GetUserByEmailQuery")
+            .WithApiVersionSet(builder.NewApiVersionSet("Identity").Build())
+            .Produces<GetUserByEmailResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .WithSummary("Get User By Email")
+            .WithDescription("Get User By Email")
+            .WithOpenApi()
+            .HasApiVersion(1.0);
 
         return builder;
     }

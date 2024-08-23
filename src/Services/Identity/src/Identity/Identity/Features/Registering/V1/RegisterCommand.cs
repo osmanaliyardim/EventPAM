@@ -89,7 +89,7 @@ public class RegisterUserEndpoint : BaseController, IMinimalEndpoint
 
                 var result = await mediator.Send(command, cancellationToken);
 
-                CookiesManagement.PassRefreshTokenToCookies(result.RefreshToken.Token, context);
+                SetRefreshTokenToCookies(result.RefreshToken);
 
                 var response = result.Adapt<RegisteredResponse>();
 
@@ -98,8 +98,7 @@ public class RegisterUserEndpoint : BaseController, IMinimalEndpoint
         )
         .WithName("RegisterUser")
         .WithApiVersionSet(builder.NewApiVersionSet("Identity").Build())
-        .Produces<RegisteredResponse>()
-        .Produces(StatusCodes.Status201Created)
+        .Produces<RegisteredResponse>(StatusCodes.Status201Created)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Register User")
         .WithDescription("Register User")

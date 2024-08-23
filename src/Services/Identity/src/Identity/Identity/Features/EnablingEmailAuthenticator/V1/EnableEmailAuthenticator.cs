@@ -11,17 +11,14 @@ using System.Web;
 using Ardalis.GuardClauses;
 using Microsoft.AspNetCore.Builder;
 using EventPAM.Identity.Repositories;
+using Microsoft.Extensions.Configuration;
+using static EventPAM.BuildingBlocks.EventPAMBase;
+using EventPAM.BuildingBlocks;
+using EventPAM.Identity.Identity.Features.EnablingOtpAuthenticator.V1;
 
 namespace EventPAM.Identity.Identity.Features.EnablingEmailAuthenticator.V1;
 
-public class EnableEmailAuthenticatorCommand : IRequest
-{
-    public Guid UserId { get; set; }
-
-    public string VerifyEmailUrlPrefix { get; set; } = default!;
-}
-
-public record EnableEmailAuthenticatorRequest(Guid UserId, string VerifyEmailUrlPrefix);
+public record EnableEmailAuthenticatorCommand(Guid UserId, string VerifyEmailUrlPrefix) : IRequest;
 
 public class EnableEmailAuthenticatorCommandValidator : AbstractValidator<EnableEmailAuthenticatorCommand>
 {
@@ -38,22 +35,26 @@ public class EnableEmailAuthenticatorCommandValidator : AbstractValidator<Enable
     }
 }
 
-public class EnableEmailAuthenticatorEndpoint : IMinimalEndpoint
+public class EnableEmailAuthenticatorEndpoint : BaseController, IMinimalEndpoint
 {
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {
         builder.MapGet($"{EndpointConfig.BaseApiPath}/identity/enable-email-authenticator",
-            async ([AsParameters] EnableEmailAuthenticatorRequest request, IMediator mediator,
-            IMapper mapper, CancellationToken cancellationToken) =>
+            async (IMediator mediator, IMapper mapper, 
+            IConfiguration configuration, CancellationToken cancellationToken) =>
             {
-                var command = mapper.Map<EnableEmailAuthenticatorCommand>(request);
+                var apiDomain = configuration.GetSection(EventPAMBase.Configs.API_CONFIG).GetValue<string>("APIDomain");
+                
+                var command = new EnableEmailAuthenticatorCommand(GetUserIdFromRequest(), $"{apiDomain}/identity/verify-email-authenticator");
 
                 await mediator.Send(command, cancellationToken);
+
+                return Ok();
             }
         )
-        //.RequireAuthorization(nameof(ApiScope))
         .WithName("EnableEmailAuthenticator")
         .WithApiVersionSet(builder.NewApiVersionSet("Identity").Build())
+        .Produces(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Enable Email Authenticator")
         .WithDescription("Enable Email Authenticator")

@@ -2,6 +2,7 @@
 using EventPAM.BuildingBlocks.CrossCuttingConcerns.Security.Entities;
 using EventPAM.BuildingBlocks.CrossCuttingConcerns.Security.JWT;
 using EventPAM.BuildingBlocks.Web;
+using EventPAM.Identity.Identity.Features.Registering.V1;
 using EventPAM.Identity.Identity.Services.AuthService;
 using EventPAM.Identity.Identity.Services.UserService;
 using Microsoft.AspNetCore.Builder;
@@ -14,26 +15,26 @@ public record RefreshTokenCommand(string? RefleshToken, string? IPAddress) : IRe
 
 public record RefreshedTokensResult(AccessToken AccessToken, RefreshToken RefreshToken);
 
-public record RefreshedTokensRequest(string? RefleshToken, string? IPAddress);
-
-public class RefreshTokenEndpoint : IMinimalEndpoint
+public class RefreshTokenEndpoint : BaseController, IMinimalEndpoint
 {
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {
         builder.MapGet($"{EndpointConfig.BaseApiPath}/identity/refresh-token",
-            async ([AsParameters] RefreshedTokensRequest request, IMediator mediator,
+            async (IMediator mediator, IHttpContextAccessor context, 
             IMapper mapper, CancellationToken cancellationToken) =>
             {
-                var command = mapper.Map<RefreshTokenCommand>(request);
+                var command = new RefreshTokenCommand(GetRefreshTokenFromCookies(), GetIpAddress(context));
 
                 var result = await mediator.Send(command, cancellationToken);
+
+                SetRefreshTokenToCookies(result.RefreshToken);
 
                 return Results.Created(uri: "", result.AccessToken);
             }
         )
-        //.RequireAuthorization(nameof(ApiScope))
         .WithName("RefreshToken")
         .WithApiVersionSet(builder.NewApiVersionSet("Identity").Build())
+        .Produces<AccessToken>(StatusCodes.Status201Created)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Refresh JWT Token")
         .WithDescription("Refresh JWT Token")
