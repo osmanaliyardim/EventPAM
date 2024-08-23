@@ -31,9 +31,9 @@ public class EnableOtpAuthenticatorEndpoint : BaseController, IMinimalEndpoint
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {
         builder.MapGet($"{EndpointConfig.BaseApiPath}/identity/enable-otp-authenticator",
-            async ( IMediator mediator, IMapper mapper, CancellationToken cancellationToken) =>
+            async (IMediator mediator, IHttpContextAccessor context, IMapper mapper, CancellationToken cancellationToken) =>
             {
-                var command = new EnableOtpAuthenticatorCommand(GetUserIdFromRequest());
+                var command = new EnableOtpAuthenticatorCommand(GetUserIdFromRequest(context));
 
                 var result = await mediator.Send(command, cancellationToken);
 

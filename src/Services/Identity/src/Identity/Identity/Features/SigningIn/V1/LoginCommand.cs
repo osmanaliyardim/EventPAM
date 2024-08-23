@@ -88,7 +88,7 @@ public class LoginEndpoint : BaseController, IMinimalEndpoint
                 var result = await mediator.Send(command, cancellationToken);
 
                 if (result.RefreshToken is not null)
-                    SetRefreshTokenToCookies(result.RefreshToken);
+                    SetRefreshTokenToCookies(result.RefreshToken, context);
 
                 var response = result.Adapt<LoggedResponse>();
 

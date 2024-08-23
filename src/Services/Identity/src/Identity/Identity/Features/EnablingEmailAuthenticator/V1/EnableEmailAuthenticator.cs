@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using MimeKit;
-using EventPAM.BuildingBlocks.CrossCuttingConcerns.Security.Entities;
 using EventPAM.BuildingBlocks.CrossCuttingConcerns.Security.Enums;
 using EventPAM.BuildingBlocks.Mailing;
 using EventPAM.Identity.Identity.Services.AuthenticatorService;
@@ -12,9 +11,8 @@ using Ardalis.GuardClauses;
 using Microsoft.AspNetCore.Builder;
 using EventPAM.Identity.Repositories;
 using Microsoft.Extensions.Configuration;
-using static EventPAM.BuildingBlocks.EventPAMBase;
 using EventPAM.BuildingBlocks;
-using EventPAM.Identity.Identity.Features.EnablingOtpAuthenticator.V1;
+using static EventPAM.Identity.Identity.Constants.Constants.Role;
 
 namespace EventPAM.Identity.Identity.Features.EnablingEmailAuthenticator.V1;
 
@@ -40,18 +38,21 @@ public class EnableEmailAuthenticatorEndpoint : BaseController, IMinimalEndpoint
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {
         builder.MapGet($"{EndpointConfig.BaseApiPath}/identity/enable-email-authenticator",
-            async (IMediator mediator, IMapper mapper, 
+            async (IMediator mediator, IMapper mapper, IHttpContextAccessor context,
             IConfiguration configuration, CancellationToken cancellationToken) =>
             {
-                var apiDomain = configuration.GetSection(EventPAMBase.Configs.API_CONFIG).GetValue<string>("APIDomain");
-                
-                var command = new EnableEmailAuthenticatorCommand(GetUserIdFromRequest(), $"{apiDomain}/identity/verify-email-authenticator");
+                var apiDomain = configuration
+                    .GetSection(EventPAMBase.Configs.API_CONFIG).GetValue<string>("APIDomain");
+
+                var command = new EnableEmailAuthenticatorCommand
+                    (GetUserIdFromRequest(context), $"{apiDomain}/identity/verify-email-authenticator");
 
                 await mediator.Send(command, cancellationToken);
 
                 return Ok();
             }
         )
+        .RequireAuthorization(policy => policy.RequireRole([Admin, Customer, EventManager]))
         .WithName("EnableEmailAuthenticator")
         .WithApiVersionSet(builder.NewApiVersionSet("Identity").Build())
         .Produces(StatusCodes.Status200OK)
@@ -94,8 +95,8 @@ internal class EnableEmailAuthenticatorCommandHandler : IRequestHandler<EnableEm
         user.AuthenticatorType = AuthenticatorType.Email;
         await _userService.Update(user);
 
-        EmailAuthenticator emailAuthenticator = await _authenticatorService.CreateEmailAuthenticator(user);
-        EmailAuthenticator addedEmailAuthenticator = await _emailAuthenticatorRepository.AddAsync(emailAuthenticator);
+        var emailAuthenticator = await _authenticatorService.CreateEmailAuthenticator(user);
+        var addedEmailAuthenticator = await _emailAuthenticatorRepository.AddAsync(emailAuthenticator);
 
         var toEmailList = new List<MailboxAddress> { new(name: $"{user.FirstName} {user.LastName}", user.Email) };
 

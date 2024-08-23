@@ -22,7 +22,7 @@ public class DeleteEventEndpoint : IMinimalEndpoint
 
                     return Results.NoContent();
                 })
-            //.RequireAuthorization(nameof(ApiScope))
+            .RequireAuthorization()
             .WithName("DeleteEvent")
             .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
             .Produces(StatusCodes.Status204NoContent)

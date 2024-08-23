@@ -35,10 +35,10 @@ public class GetCustomerByIdEndpoint : IMinimalEndpoint
 
                     return Results.Ok(response);
                 })
-            //.RequireAuthorization(nameof(ApiScope))
+            .RequireAuthorization()
             .WithName("GetCustomerById")
             .WithApiVersionSet(builder.NewApiVersionSet("Customer").Build())
-            .Produces<GetCustomerByIdResponseDto>()
+            .Produces<GetCustomerByIdResponseDto>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Get Customer By Id")
             .WithDescription("Get Customer By Id")

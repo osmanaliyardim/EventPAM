@@ -69,7 +69,8 @@ public class MailKitMailService : IMailService
         email.Body = bodyBuilder.ToMessageBody();
         email.Prepare(EncodingConstraint.SevenBit);
 
-        if (_mailSettings.DkimPrivateKey != null && _mailSettings.DkimSelector != null && _mailSettings.DomainName != null)
+        if (_mailSettings.DkimPrivateKey is not null && _mailSettings.DkimSelector is not null 
+                && _mailSettings.DomainName is not null)
         {
             _signer = new DkimSigner(key: ReadPrivateKeyFromPemEncodedString(), _mailSettings.DomainName, _mailSettings.DkimSelector)
             {
@@ -92,11 +93,14 @@ public class MailKitMailService : IMailService
     private AsymmetricKeyParameter ReadPrivateKeyFromPemEncodedString()
     {
         AsymmetricKeyParameter result;
-        string pemEncodedKey = "-----BEGIN RSA PRIVATE KEY-----\n" + _mailSettings.DkimPrivateKey + "\n-----END RSA PRIVATE KEY-----";
-        using (StringReader stringReader = new(pemEncodedKey))
+
+        string pemEncodedKey =
+            "BEGIN RSA PRIVATE KEY-----\n" + _mailSettings.DkimPrivateKey + "\n-----END RSA PRIVATE KEY";
+
+        using (var stringReader = new StringReader(pemEncodedKey))
         {
-            PemReader pemReader = new(stringReader);
-            object? pemObject = pemReader.ReadObject();
+            var pemReader = new PemReader(stringReader);
+            var pemObject = pemReader.ReadObject();
             result = ((AsymmetricCipherKeyPair)pemObject).Private;
         }
 

@@ -40,7 +40,7 @@ public class CreateEventEndpoint : IMinimalEndpoint
 
                 return Results.CreatedAtRoute("GetEventById", new { id = result.EventId }, response);
             })
-            //.RequireAuthorization(nameof(ApiScope))
+            .RequireAuthorization()
             .WithName("CreateEvent")
             .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
             .Produces<CreateEventResponseDto>(StatusCodes.Status201Created)

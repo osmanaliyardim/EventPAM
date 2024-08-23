@@ -1,5 +1,4 @@
 ﻿using Ardalis.GuardClauses;
-using Duende.IdentityServer.EntityFramework.Entities;
 using EventPAM.BuildingBlocks.Core.CQRS;
 using EventPAM.BuildingBlocks.Web;
 using EventPAM.Identity.Dtos;
@@ -8,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using static EventPAM.Identity.Identity.Constants.Constants.Role;
 
 namespace EventPAM.Identity.Identity.Features.GettingUserById.V1;
 
@@ -38,7 +38,7 @@ public class GeUserByIdEndpoint : IMinimalEndpoint
 
                 return Results.Ok(response);
             })
-            .RequireAuthorization(nameof(ApiScope))
+            .RequireAuthorization(policy => policy.RequireRole([Admin, Customer, EventManager]))
             .WithName("GetUserByIdQuery")
             .WithApiVersionSet(builder.NewApiVersionSet("Identity").Build())
             .Produces<GetUsertByIdResponse>(StatusCodes.Status200OK)

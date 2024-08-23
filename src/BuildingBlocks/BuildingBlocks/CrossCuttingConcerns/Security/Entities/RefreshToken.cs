@@ -37,7 +37,6 @@ public record RefreshToken : Entity<Guid>, IVersion
         string replacedByToken,
         string reasonRevoked
     ) 
-        : this()
     {
         Id = id;
         Token = token;

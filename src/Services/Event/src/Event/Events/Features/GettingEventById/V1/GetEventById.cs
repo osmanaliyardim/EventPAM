@@ -22,15 +22,14 @@ public class GetEventByIdEndpoint : IMinimalEndpoint
 
                     return Results.Ok(response);
                 })
-            //.RequireAuthorization(nameof(ApiScope))
-            .WithName("GetEventById")
-            .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
-            .Produces<GetEventByIdResponseDto>()
-            .ProducesProblem(StatusCodes.Status400BadRequest)
-            .WithSummary("Get Event By Id")
-            .WithDescription("Get Event By Id")
-            .WithOpenApi()
-            .HasApiVersion(1.0);
+                .WithName("GetEventById")
+                .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
+                .Produces<GetEventByIdResponseDto>(StatusCodes.Status200OK)
+                .ProducesProblem(StatusCodes.Status400BadRequest)
+                .WithSummary("Get Event By Id")
+                .WithDescription("Get Event By Id")
+                .WithOpenApi()
+                .HasApiVersion(1.0);
 
         return builder;
     }

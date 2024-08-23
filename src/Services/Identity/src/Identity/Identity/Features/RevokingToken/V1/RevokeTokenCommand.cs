@@ -24,8 +24,8 @@ public class RevokeTokenEndpoint : BaseController, IMinimalEndpoint
             async ([FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] RevokedTokenRequest request, 
             IMediator mediator, IHttpContextAccessor context, IMapper mapper, CancellationToken cancellationToken) =>
             {
-                if (request.RefreshToken is null)
-                    request = new RevokedTokenRequest(GetRefreshTokenFromCookies()!, GetIpAddress(context)!);
+                if (request is null ||request.RefreshToken is null)
+                    request = new RevokedTokenRequest(GetRefreshTokenFromCookies(context)!, GetIpAddress(context)!);
 
                 var command = mapper.Map<RevokeTokenCommand>(request);
 

@@ -28,10 +28,9 @@ public class GetAvailableSeatsEndpoint : IMinimalEndpoint
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {
         builder.MapGet($"{EndpointConfig.BaseApiPath}/event/get-available-seats/{{eventId}}", GetAvailableSeats)
-            //.RequireAuthorization(nameof(ApiScope))
             .WithName("GetAvailableSeats")
             .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
-            .Produces<GetAvailableSeatsResponseDto>()
+            .Produces<GetAvailableSeatsResponseDto>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Get Available Seats")
             .WithDescription("Get Available Seats")

@@ -22,23 +22,24 @@ public abstract class BaseController : ControllerBase
 
     protected string? GetIpAddress(IHttpContextAccessor context)
     {
-        if (Request.Headers.ContainsKey("X-Forwarded-For"))
-            return Request.Headers["X-Forwarded-For"];
+        if (context.HttpContext!.Request.Headers.ContainsKey("X-Forwarded-For"))
+            return context.HttpContext.Request.Headers["X-Forwarded-For"];
 
-        return context.HttpContext!.Connection.RemoteIpAddress?.MapToIPv4().ToString();
+        return context.HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString();
     }
 
-    protected string? GetRefreshTokenFromCookies() => Request.Cookies["refreshToken"];
+    protected string? GetRefreshTokenFromCookies(IHttpContextAccessor context) 
+        => context.HttpContext!.Request.Cookies["refreshToken"];
 
-    protected void SetRefreshTokenToCookies(RefreshToken refreshToken)
+    protected void SetRefreshTokenToCookies(RefreshToken refreshToken, IHttpContextAccessor context)
     {
         CookieOptions cookieOptions = new() { HttpOnly = true, Expires = DateTime.UtcNow.AddDays(7) };
-        Response.Cookies.Append(key: "refreshToken", refreshToken.Token, cookieOptions);
+        context.HttpContext!.Response.Cookies.Append(key: "refreshToken", refreshToken.Token, cookieOptions);
     }
 
-    protected Guid GetUserIdFromRequest()
+    protected Guid GetUserIdFromRequest(IHttpContextAccessor context)
     {
-        var userId = HttpContext.User.GetUserId();
+        var userId = context.HttpContext!.User.GetUserId();
         
         return userId;
     }

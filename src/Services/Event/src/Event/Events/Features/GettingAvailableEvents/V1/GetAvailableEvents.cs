@@ -42,15 +42,14 @@ public class GetAvailableEventsEndpoint : IMinimalEndpoint
 
                     return Results.Ok(response);
                 })
-            //.RequireAuthorization(nameof(ApiScope))
-            .WithName("GetAvailableEvents")
-            .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
-            .Produces<GetAvailableEventsResponseDto>()
-            .ProducesProblem(StatusCodes.Status400BadRequest)
-            .WithSummary("Get Available Events")
-            .WithDescription("Get Available Events")
-            .WithOpenApi()
-            .HasApiVersion(1.0);
+                .WithName("GetAvailableEvents")
+                .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
+                .Produces<GetAvailableEventsResponseDto>(StatusCodes.Status200OK)
+                .ProducesProblem(StatusCodes.Status400BadRequest)
+                .WithSummary("Get Available Events")
+                .WithDescription("Get Available Events")
+                .WithOpenApi()
+                .HasApiVersion(1.0);
 
         return builder;
     }

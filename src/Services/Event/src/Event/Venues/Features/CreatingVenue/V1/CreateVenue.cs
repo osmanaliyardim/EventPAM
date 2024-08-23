@@ -38,10 +38,10 @@ public class CreateVenueEndpoint : IMinimalEndpoint
 
                 return Results.Ok(response);
             })
-            //.RequireAuthorization(nameof(ApiScope))
+            .RequireAuthorization()
             .WithName("CreateVenue")
             .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
-            .Produces<CreateVenueResponseDto>()
+            .Produces<CreateVenueResponseDto>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Create Venue")
             .WithDescription("Create Venue")

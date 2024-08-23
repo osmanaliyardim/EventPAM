@@ -30,7 +30,7 @@ public class GeUserByNameEndpoint : IMinimalEndpoint
 
                 return Results.Ok(response);
             })
-            .RequireAuthorization(nameof(ApiScope))
+            .RequireAuthorization()
             .WithName("GetUserByEmailQuery")
             .WithApiVersionSet(builder.NewApiVersionSet("Identity").Build())
             .Produces<GetUserByEmailResponse>(StatusCodes.Status200OK)

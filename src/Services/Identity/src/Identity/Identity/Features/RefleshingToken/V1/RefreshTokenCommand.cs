@@ -2,7 +2,6 @@
 using EventPAM.BuildingBlocks.CrossCuttingConcerns.Security.Entities;
 using EventPAM.BuildingBlocks.CrossCuttingConcerns.Security.JWT;
 using EventPAM.BuildingBlocks.Web;
-using EventPAM.Identity.Identity.Features.Registering.V1;
 using EventPAM.Identity.Identity.Services.AuthService;
 using EventPAM.Identity.Identity.Services.UserService;
 using Microsoft.AspNetCore.Builder;
@@ -11,7 +10,7 @@ using Microsoft.AspNetCore.Routing;
 
 namespace EventPAM.Identity.Identity.Features.RefreshingToken.V1;
 
-public record RefreshTokenCommand(string? RefleshToken, string? IPAddress) : IRequest<RefreshedTokensResult>;
+public record RefreshTokenCommand(string? RefreshToken, string? IPAddress) : IRequest<RefreshedTokensResult>;
 
 public record RefreshedTokensResult(AccessToken AccessToken, RefreshToken RefreshToken);
 
@@ -23,11 +22,11 @@ public class RefreshTokenEndpoint : BaseController, IMinimalEndpoint
             async (IMediator mediator, IHttpContextAccessor context, 
             IMapper mapper, CancellationToken cancellationToken) =>
             {
-                var command = new RefreshTokenCommand(GetRefreshTokenFromCookies(), GetIpAddress(context));
+                var command = new RefreshTokenCommand(GetRefreshTokenFromCookies(context), GetIpAddress(context));
 
                 var result = await mediator.Send(command, cancellationToken);
 
-                SetRefreshTokenToCookies(result.RefreshToken);
+                SetRefreshTokenToCookies(result.RefreshToken, context);
 
                 return Results.Created(uri: "", result.AccessToken);
             }
@@ -60,20 +59,17 @@ internal class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand,
     {
         Guard.Against.Null(request, nameof(request));
 
-        if (request.RefleshToken is null)
-            throw new RefreshTokenNotFoundException();
-
         var refreshToken = await _authService
-            .GetRefreshTokenByToken(request.RefleshToken);
+            .GetRefreshTokenByToken(request.RefreshToken!);
 
-        if (refreshToken!.Revoked != null)
+        if (refreshToken!.Revoked is not null)
             await _authService.RevokeDescendantRefreshTokens(
                 refreshToken,
                 request.IPAddress!,
                 reason: $"Attempted reuse of revoked ancestor token: {refreshToken.Token}"
             );
         
-        if (refreshToken.Revoked != null && DateTime.UtcNow >= refreshToken.Expires)
+        if (refreshToken.Revoked is not null && DateTime.UtcNow >= refreshToken.Expires)
             throw new InvalidRefreshTokenException();
 
         var user = await _userService.GetById(refreshToken.UserId);

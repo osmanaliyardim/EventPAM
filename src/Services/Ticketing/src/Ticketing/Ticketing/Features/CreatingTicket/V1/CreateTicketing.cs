@@ -40,10 +40,10 @@ public class CreateTicketingEndpoint : IMinimalEndpoint
 
                 return Results.Ok(response);
             })
-            //.RequireAuthorization(nameof(ApiScope))
+            .RequireAuthorization()
             .WithName("CreateTicketing")
             .WithApiVersionSet(builder.NewApiVersionSet("Ticketing").Build())
-            .Produces<CreateTicketingResponseDto>()
+            .Produces<CreateTicketingResponseDto>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Create Ticketing")
             .WithDescription("Create Ticketing")

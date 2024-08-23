@@ -56,6 +56,6 @@ public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
             .HasOne(r => r.User)
             .WithOne()
             .HasForeignKey<RefreshToken>(r => r.UserId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

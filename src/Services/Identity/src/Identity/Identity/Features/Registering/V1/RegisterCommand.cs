@@ -89,7 +89,7 @@ public class RegisterUserEndpoint : BaseController, IMinimalEndpoint
 
                 var result = await mediator.Send(command, cancellationToken);
 
-                SetRefreshTokenToCookies(result.RefreshToken);
+                SetRefreshTokenToCookies(result.RefreshToken, context);
 
                 var response = result.Adapt<RegisteredResponse>();
 

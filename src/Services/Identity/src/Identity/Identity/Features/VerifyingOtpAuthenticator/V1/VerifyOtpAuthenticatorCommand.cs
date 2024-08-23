@@ -20,9 +20,10 @@ public class VerifyOtpAuthenticatorEndpoint : BaseController, IMinimalEndpoint
     {
         builder.MapPost($"{EndpointConfig.BaseApiPath}/identity/verify-otp-authenticator",
             async ([FromBody] VerifyOtpAuthenticatorRequest request, IMediator mediator,
-            IMapper mapper, CancellationToken cancellationToken) =>
+            IMapper mapper, IHttpContextAccessor context, CancellationToken cancellationToken) =>
             {
-                var requestWithUserId = new VerifyOtpAuthenticatorRequest(GetUserIdFromRequest(), request.AuthenticationCode);
+                var requestWithUserId = 
+                    new VerifyOtpAuthenticatorRequest(GetUserIdFromRequest(context), request.AuthenticationCode);
 
                 var command = mapper.Map<VerifyOtpAuthenticatorCommand>(requestWithUserId);
 

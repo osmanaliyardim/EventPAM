@@ -51,9 +51,10 @@ public class CompleteRegisterCustomerEndpoint : IMinimalEndpoint
 
                 return Results.Ok(response);
             })
+            .RequireAuthorization()
             .WithName("CompleteRegisterCustomer")
             .WithApiVersionSet(builder.NewApiVersionSet("Customer").Build())
-            .Produces<CompleteRegisterCustomerResponseDto>()
+            .Produces<CompleteRegisterCustomerResponseDto>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Complete Register Customer")
             .WithDescription("Complete Register Customer")

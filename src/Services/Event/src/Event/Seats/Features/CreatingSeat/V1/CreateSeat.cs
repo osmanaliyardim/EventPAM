@@ -30,7 +30,7 @@ public class CreateSeatEndpoint : IMinimalEndpoint
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {
         builder.MapPost($"{EndpointConfig.BaseApiPath}/event/seat", CreateSeat)
-            //.RequireAuthorization(nameof(ApiScope))
+            .RequireAuthorization()
             .WithName("CreateSeat")
             .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
             .Produces<CreateSeatResponse>(StatusCodes.Status200OK)

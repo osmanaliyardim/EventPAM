@@ -41,7 +41,7 @@ public class UpdateEventEndpoint : IMinimalEndpoint
 
                 return Results.Ok(result);
             })
-            //.RequireAuthorization(nameof(ApiScope))
+            .RequireAuthorization()
             .WithName("UpdateEvent")
             .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
             .Produces(StatusCodes.Status200OK)

@@ -22,10 +22,10 @@ public class ReserveSeatEndpoint : IMinimalEndpoint
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {
         builder.MapPost($"{EndpointConfig.BaseApiPath}/event/reserve-seat", ReserveSeat)
-            //.RequireAuthorization(nameof(ApiScope))
+            .RequireAuthorization()
             .WithName("ReserveSeat")
             .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
-            .Produces<ReserveSeatResponseDto>()
+            .Produces<ReserveSeatResponseDto>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Reserve Seat")
             .WithDescription("Reserve Seat")
