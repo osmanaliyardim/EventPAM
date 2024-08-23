@@ -184,17 +184,37 @@ public class PersistMessageProcessor : IPersistMessageProcessor
 
         Guid id;
         if (messageEnvelope.Message is IEvent message)
+        {
             id = message.EventId;
+
+            var messageInDB = await _persistMessageDbContext.PersistMessages
+                .SingleOrDefaultAsync(pm => pm.Id == id, cancellationToken: cancellationToken);
+            
+            if (messageInDB is null)
+                await _persistMessageDbContext.PersistMessages.AddAsync(
+                    new PersistMessage(
+                       id,
+                       messageEnvelope.Message.GetType().ToString(),
+                       JsonSerializer.Serialize(messageEnvelope),
+                       deliveryType),
+                    cancellationToken: cancellationToken
+                );
+            else
+                _persistMessageDbContext.PersistMessages.Update(messageInDB);
+        } 
         else
+        {
             id = NewId.NextGuid();
 
-        await _persistMessageDbContext.PersistMessages.AddAsync(
-            new PersistMessage(
-                id,
-                messageEnvelope.Message.GetType().ToString(),
-                JsonSerializer.Serialize(messageEnvelope),
-                deliveryType),
-            cancellationToken);
+            await _persistMessageDbContext.PersistMessages.AddAsync(
+                new PersistMessage(
+                   id,
+                   messageEnvelope.Message.GetType().ToString(),
+                   JsonSerializer.Serialize(messageEnvelope),
+                   deliveryType),
+                cancellationToken: cancellationToken
+            );
+        }
 
         await _persistMessageDbContext.SaveChangesAsync(cancellationToken);
 
