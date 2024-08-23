@@ -52,6 +52,7 @@ internal class DeleteEventHandler : ICommandHandler<DeleteEvent, DeleteEventResu
     {
         _eventDbContext = eventDbContext;
     }
+
     public async Task<DeleteEventResult> Handle(DeleteEvent request, CancellationToken cancellationToken)
     {
         Guard.Against.Null(request, nameof(request));
@@ -60,7 +61,7 @@ internal class DeleteEventHandler : ICommandHandler<DeleteEvent, DeleteEventResu
             ?? throw new EventNotFountException();
 
         @event.Delete(@event.Id, @event.EventNumber, @event.VenueId, @event.DurationMinutes,
-            @event.EventDate, @event.Status, @event.Price);
+            @event.EventDate, status: Enums.EventStatus.Cancelled, @event.Price, isDeleted: true);
 
         var deleteEvent = _eventDbContext.Events.Update(@event).Entity;
 

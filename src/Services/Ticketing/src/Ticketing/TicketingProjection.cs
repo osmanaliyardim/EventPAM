@@ -35,7 +35,7 @@ public class TicketingProjection : IProjectionProcessor
             await _ticketingReadDbContext.Tickets.AsQueryable()
                 .SingleOrDefaultAsync(t => t.Id == @event.Id && !t.IsDeleted, cancellationToken);
 
-        if (reservation == null)
+        if (reservation is null)
         {
             var ticketingReadModel = new TicketingReadModel
             {

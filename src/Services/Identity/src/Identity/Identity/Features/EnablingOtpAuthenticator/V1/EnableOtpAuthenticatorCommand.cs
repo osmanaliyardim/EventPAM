@@ -1,5 +1,4 @@
 ﻿using Ardalis.GuardClauses;
-using Duende.IdentityServer.EntityFramework.Entities;
 using EventPAM.BuildingBlocks.Web;
 using EventPAM.Identity.Identity.Services.AuthenticatorService;
 using EventPAM.Identity.Identity.Services.UserService;

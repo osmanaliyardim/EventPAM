@@ -10,7 +10,6 @@ using EventPAM.Identity.Identity.Services.UserService;
 using System.Web;
 using Ardalis.GuardClauses;
 using Microsoft.AspNetCore.Builder;
-using Duende.IdentityServer.EntityFramework.Entities;
 using EventPAM.Identity.Repositories;
 
 namespace EventPAM.Identity.Identity.Features.EnablingEmailAuthenticator.V1;

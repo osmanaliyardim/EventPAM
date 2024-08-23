@@ -1,9 +1,7 @@
 ﻿using Ardalis.GuardClauses;
-using Duende.IdentityServer.EntityFramework.Entities;
 using EventPAM.BuildingBlocks.CrossCuttingConcerns.Security.Entities;
 using EventPAM.BuildingBlocks.CrossCuttingConcerns.Security.JWT;
 using EventPAM.BuildingBlocks.Web;
-using EventPAM.Identity.Identity.Features.EnablingOtpAuthenticator.V1;
 using EventPAM.Identity.Identity.Services.AuthService;
 using EventPAM.Identity.Identity.Services.UserService;
 using Microsoft.AspNetCore.Builder;

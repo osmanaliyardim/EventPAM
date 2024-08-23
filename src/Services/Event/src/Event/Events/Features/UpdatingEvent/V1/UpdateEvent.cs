@@ -13,7 +13,7 @@ public record UpdateEvent(Guid EventId, string EventNumber, Guid VenueId, decima
 {
     public bool BypassCache { get; }
 
-    public string? CacheKey { get; } = "GetAvailableEvents";
+    public string? CacheKey { get; }
 
     public string CacheGroupKey => "GetEvents";
 }
@@ -63,10 +63,10 @@ public class UpdateEventValidator : AbstractValidator<CreateEvent>
 
         RuleFor(x => x.Status).Must(p => (p.GetType().IsEnum &&
                                           p == Enums.EventStatus.InAction) ||
-                                         p == Enums.EventStatus.Canceled ||
+                                         p == Enums.EventStatus.Cancelled ||
                                          p == Enums.EventStatus.Delay ||
                                          p == Enums.EventStatus.Completed)
-            .WithMessage("Status must be InAction, Delay, Canceled or Completed");
+            .WithMessage("Status must be InAction, Delay, Cancelled or Completed");
 
         RuleFor(x => x.VenueId).NotEmpty().WithMessage("VenueId cannot be empty");
         RuleFor(x => x.DurationMinutes).GreaterThan(0).WithMessage("DurationMinutes must be greater than 0");
@@ -87,8 +87,9 @@ internal class UpdateEventHandler : ICommandHandler<UpdateEvent, UpdateEventResu
     {
         Guard.Against.Null(request, nameof(request));
 
-        var @event = await _eventDbContext.Events.SingleOrDefaultAsync(x => x.Id == request.EventId,
-            cancellationToken) ?? throw new EventNotFountException();
+        var @event = await _eventDbContext.Events
+            .SingleOrDefaultAsync(x => x.Id == request.EventId, cancellationToken) 
+                ?? throw new EventNotFountException();
 
         @event.Update(EventId.Of(request.EventId), EventNumber.Of(request.EventNumber), VenueId.Of(request.VenueId),
              DurationMinutes.Of(request.DurationMinutes), EventDate.Of(request.EventDate), request.Status,

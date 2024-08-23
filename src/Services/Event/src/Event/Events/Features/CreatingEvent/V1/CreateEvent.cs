@@ -65,10 +65,10 @@ public class CreateEventValidator : AbstractValidator<CreateEvent>
         RuleFor(x => x.Status)
             .Must(p => (p.GetType().IsEnum &&
                                          p == Enums.EventStatus.InAction) ||
-                                         p == Enums.EventStatus.Canceled ||
+                                         p == Enums.EventStatus.Cancelled ||
                                          p == Enums.EventStatus.Delay ||
                                          p == Enums.EventStatus.Completed)
-            .WithMessage("Status must be InAction, Delay, Canceled or Completed");
+            .WithMessage("Status must be InAction, Delay, Cancelled or Completed");
 
         RuleFor(x => x.VenueId)
             .NotEmpty()

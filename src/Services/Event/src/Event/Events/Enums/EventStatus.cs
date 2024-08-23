@@ -5,6 +5,6 @@ public enum EventStatus
     Unknown = 0,
     InAction = 1,
     Delay = 2,
-    Canceled = 3,
+    Cancelled = 3,
     Completed = 4
 }

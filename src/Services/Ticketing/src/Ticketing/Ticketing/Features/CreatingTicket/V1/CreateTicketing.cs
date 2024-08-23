@@ -1,5 +1,4 @@
 using Ardalis.GuardClauses;
-using Bogus.Extensions.Extras;
 using EventPAM.BuildingBlocks.Core;
 using EventPAM.BuildingBlocks.Core.Event;
 using EventPAM.BuildingBlocks.Core.Model;
@@ -72,7 +71,8 @@ internal class CreateTicketingCommandHandler : ICommandHandler<CreateTicketing, 
     private readonly EventGrpcService.EventGrpcServiceClient _eventGrpcServiceClient;
     private readonly CustomerGrpcService.CustomerGrpcServiceClient _customerGrpcServiceClient;
 
-    public CreateTicketingCommandHandler(IEventStoreDBRepository<Models.Ticketing> eventStoreDbRepository,
+    public CreateTicketingCommandHandler(
+        IEventStoreDBRepository<Models.Ticketing> eventStoreDbRepository,
         ICurrentUserProvider currentUserProvider,
         IEventDispatcher eventDispatcher,
         EventGrpcService.EventGrpcServiceClient eventGrpcServiceClient,

@@ -33,8 +33,8 @@ internal class UpdateEventMongoCommandHandler : ICommandHandler<UpdateEventMongo
                 ?? throw new EventNotFountException();
 
         await _eventRepository.UpdateAsync(
-            Builders<EventReadModel>.Filter.Eq(e => e.EventId, eventReadModel.EventId),
-            Builders<EventReadModel>.Update
+            filter: Builders<EventReadModel>.Filter.Eq(e => e.EventId, eventReadModel.EventId),
+            updateDefinition: Builders<EventReadModel>.Update
                 .Set(x => x.Price, eventReadModel.Price)
                 .Set(x => x.VenueId, eventReadModel.VenueId)
                 .Set(x => x.DurationMinutes, eventReadModel.DurationMinutes)
@@ -42,7 +42,7 @@ internal class UpdateEventMongoCommandHandler : ICommandHandler<UpdateEventMongo
                 .Set(x => x.EventNumber, eventReadModel.EventNumber)
                 .Set(x => x.Status, eventReadModel.Status)
                 .Set(x => x.IsDeleted, eventReadModel.IsDeleted),
-            cancellationToken);
+            cancellationToken: cancellationToken);
 
         return Unit.Value;
     }

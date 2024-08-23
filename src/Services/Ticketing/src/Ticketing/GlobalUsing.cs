@@ -1,6 +1,5 @@
 ﻿global using static EventPAM.BuildingBlocks.EventPAMBase;
 global using MediatR;
-global using Duende.IdentityServer.EntityFramework.Entities;
 global using EventPAM.BuildingBlocks.Core.CQRS;
 global using EventPAM.BuildingBlocks.Web;
 global using FluentValidation;

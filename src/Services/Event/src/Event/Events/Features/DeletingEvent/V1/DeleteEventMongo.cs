@@ -32,10 +32,10 @@ internal class DeleteEventMongoCommandHandler : ICommandHandler<DeleteEventMongo
 
         // Soft delete (setting IsDeleted as true - still accessable)
         await _eventRepository.UpdateAsync(
-            Builders<EventReadModel>.Filter.Eq(e => e.EventId, eventReadModel.EventId),
-            Builders<EventReadModel>.Update
+            filter: Builders<EventReadModel>.Filter.Eq(e => e.EventId, eventReadModel.EventId),
+            updateDefinition: Builders<EventReadModel>.Update
                 .Set(x => x.IsDeleted, eventReadModel.IsDeleted),
-            cancellationToken);
+            cancellationToken: cancellationToken);
 
         // Hard delete (directly removing from DB - no way to access again)
         //await _eventRepository.DeleteAsync(
