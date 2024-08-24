@@ -9,4 +9,6 @@ public record VenueReadModel : Aggregate<Guid>
     public required string Name { get; init; }
 
     public required int Capacity { get; init; }
+
+    public required Address Address { get; init; }
 }

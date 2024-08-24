@@ -1,5 +1,4 @@
 using EventPAM.Event.Events.Enums;
-using EventPAM.Event.Events.Models;
 using EventPAM.Event.Events.ValueObjects;
 using EventPAM.Event.Seats.Enums;
 using EventPAM.Event.Seats.Models;
@@ -22,9 +21,18 @@ public static class InitialData
     {
         Venues =
         [
-            Venue.Create(VenueId.Of(new Guid("3c5c0000-97c6-fc34-fcd3-08db322230c8")), Name.Of("Stadium X"), Capacity.Of(100000)),
-            Venue.Create(VenueId.Of(new Guid("3c5c0000-97c6-fc34-2e04-08db322230c9")), Name.Of("Concert Hall Y"), Capacity.Of(150000)),
-            Venue.Create(VenueId.Of(new Guid("3c5c0000-97c6-fc34-2e11-08db322230c9")), Name.Of("Sport Complex Z"), Capacity.Of(50000))
+            Venue.Create(
+                VenueId.Of(new Guid("3c5c0000-97c6-fc34-fcd3-08db322230c8")), 
+                Name.Of("Stadium X"), Capacity.Of(100000), 
+                new Address("Turkiye", "Izmir", "Ataturk St.", "35500")),
+            Venue.Create(
+                VenueId.Of(new Guid("3c5c0000-97c6-fc34-2e04-08db322230c9")), 
+                Name.Of("Concert Hall Y"), Capacity.Of(150000), 
+                new Address("Turkiye", "Istanbul", "Fevzi Cakmak Avenue St.", "35450")),
+            Venue.Create(
+                VenueId.Of(new Guid("3c5c0000-97c6-fc34-2e11-08db322230c9")), 
+                Name.Of("Sport Complex Z"), Capacity.Of(50000), 
+                new Address("Turkiye", "Ankara", "Enver Pasha St.", "35400"))
         ];
 
         Events =

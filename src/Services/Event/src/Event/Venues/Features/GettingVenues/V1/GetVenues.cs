@@ -81,7 +81,7 @@ internal class GetVenuesHandler : IQueryHandler<GetVenues, GetVenuesResult>
         );
 
         if (!venues.Items.Any())
-            throw new VenueNotFound();
+            throw new VenueNotFoundException();
 
         var venueDtos = _mapper.Map<GetListResponse<VenueDto>>(venues);
 

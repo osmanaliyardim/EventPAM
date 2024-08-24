@@ -8,7 +8,7 @@ using static EventPAM.Event.Events.Constants.Constants.Role;
 
 namespace EventPAM.Event.Venues.Features.CreatingVenue.V1;
 
-public record CreateVenue(string Name, int Capacity) 
+public record CreateVenue(string Name, int Capacity, Address Address) 
     : ICommand<CreateVenueResult>, IInternalCommand
 {
     public Guid Id { get; init; } = NewId.NextGuid();
@@ -17,9 +17,9 @@ public record CreateVenue(string Name, int Capacity)
 public record CreateVenueResult(Guid VenueId);
 
 public record VenueCreatedDomainEvent
-    (Guid VenueId, string Name, int Capacity, bool IsDeleted) : IDomainEvent;
+    (Guid VenueId, string Name, int Capacity, Address Address, bool IsDeleted) : IDomainEvent;
 
-public record CreateVenueRequestDto(string Name, int Capacity);
+public record CreateVenueRequestDto(string Name, int Capacity, Address Address);
 
 public record CreateVenueResponseDto(Guid VenueId);
 
@@ -59,6 +59,7 @@ public class CreateVenueValidator : AbstractValidator<CreateVenue>
     {
         RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required");
         RuleFor(x => x.Capacity).NotEmpty().WithMessage("Venue Capacity is required");
+        RuleFor(x => x.Address).NotEmpty().WithMessage("Address is required");
     }
 }
 
@@ -83,7 +84,7 @@ public class CreateVenueHandler : IRequestHandler<CreateVenue, CreateVenueResult
             throw new VenueAlreadyExistException();
         }
 
-        var entity = Venue.Create(VenueId.Of(request.Id), Name.Of(request.Name), Capacity.Of(request.Capacity));
+        var entity = Venue.Create(VenueId.Of(request.Id), Name.Of(request.Name), Capacity.Of(request.Capacity), request.Address);
 
         var newVenue = (await _eventDbContext.Venues.AddAsync(entity, cancellationToken)).Entity;
 

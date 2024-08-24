@@ -2,9 +2,9 @@
 
 namespace EventPAM.Event.Venues.Exceptions;
 
-public class VenueNotFound : NotFoundException
+public class VenueNotFoundException : NotFoundException
 {
-    public VenueNotFound() : base(Messages.USER_NOT_FOUND)
+    public VenueNotFoundException() : base(Messages.VENUE_NOT_FOUND)
     {
 
     }
