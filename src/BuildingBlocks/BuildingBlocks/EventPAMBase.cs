@@ -18,6 +18,7 @@ public class EventPAMBase
         public const string ES_INDEX_NULL = "Elastic Index name cannot be null or empty";
         public const string INVALID_CREDENTIALS = "Invalid Credentials";
         public const string USER_NOT_FOUND = "User could not be found!";
+        public const string VENUE_NOT_FOUND = "Venue could not be found!";
         public const string AGE_INVALID = "Age cannot be null or negative";
         public const string NAME_INVALID = "Name cannot be empty or whitespace.";
         public const string USER_ALREADY_EXISTS = "User already exists!";
