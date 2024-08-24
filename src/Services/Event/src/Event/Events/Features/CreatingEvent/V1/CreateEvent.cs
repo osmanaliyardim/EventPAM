@@ -3,6 +3,7 @@ using EventPAM.Event.Events.ValueObjects;
 using EventPAM.Event.Venues.ValueObjects;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using static EventPAM.Event.Events.Constants.Constants.Role;
 
 namespace EventPAM.Event.Events.Features.CreatingEvent.V1;
 
@@ -40,7 +41,7 @@ public class CreateEventEndpoint : IMinimalEndpoint
 
                 return Results.CreatedAtRoute("GetEventById", new { id = result.EventId }, response);
             })
-            .RequireAuthorization()
+            .RequireAuthorization(policy => policy.RequireRole([Admin, EventManager]))
             .WithName("CreateEvent")
             .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
             .Produces<CreateEventResponseDto>(StatusCodes.Status201Created)

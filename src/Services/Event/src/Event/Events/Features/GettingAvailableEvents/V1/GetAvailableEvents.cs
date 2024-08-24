@@ -3,6 +3,7 @@ using EventPAM.BuildingBlocks.Core.Requests;
 using EventPAM.BuildingBlocks.Core.Responses;
 using EventPAM.Event.Repositories;
 using MongoDB.Driver.Linq;
+using static EventPAM.Event.Events.Constants.Constants.Role;
 
 namespace EventPAM.Event.Events.Features.GettingAvailableEvents.V1;
 
@@ -42,6 +43,7 @@ public class GetAvailableEventsEndpoint : IMinimalEndpoint
 
                     return Results.Ok(response);
                 })
+                .RequireAuthorization(policy => policy.RequireRole([Admin, Customer]))
                 .WithName("GetAvailableEvents")
                 .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
                 .Produces<GetAvailableEventsResponseDto>(StatusCodes.Status200OK)

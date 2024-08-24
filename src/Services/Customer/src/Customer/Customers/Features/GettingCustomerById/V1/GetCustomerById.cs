@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using Role = EventPAM.Customer.Customers.Constants.Constants.Role;
 
 namespace EventPAM.Customer.Customers.Features.GettingCustomerById.V1;
 
@@ -35,7 +36,7 @@ public class GetCustomerByIdEndpoint : IMinimalEndpoint
 
                     return Results.Ok(response);
                 })
-            .RequireAuthorization()
+            .RequireAuthorization(policy => policy.RequireRole([Role.Admin, Role.Customer]))
             .WithName("GetCustomerById")
             .WithApiVersionSet(builder.NewApiVersionSet("Customer").Build())
             .Produces<GetCustomerByIdResponseDto>(StatusCodes.Status200OK)

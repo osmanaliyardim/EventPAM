@@ -1,5 +1,4 @@
 ﻿using Ardalis.GuardClauses;
-using Duende.IdentityServer.EntityFramework.Entities;
 using EventPAM.BuildingBlocks.Core.CQRS;
 using EventPAM.BuildingBlocks.Web;
 using EventPAM.Identity.Dtos;
@@ -8,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using static EventPAM.Identity.Identity.Constants.Constants.Role;
 
 namespace EventPAM.Identity.Identity.Features.GettingUserByName.V1;
 
@@ -30,7 +30,7 @@ public class GeUserByNameEndpoint : IMinimalEndpoint
 
                 return Results.Ok(response);
             })
-            .RequireAuthorization()
+            .RequireAuthorization(policy => policy.RequireRole([Admin, Customer, EventManager]))
             .WithName("GetUserByEmailQuery")
             .WithApiVersionSet(builder.NewApiVersionSet("Identity").Build())
             .Produces<GetUserByEmailResponse>(StatusCodes.Status200OK)

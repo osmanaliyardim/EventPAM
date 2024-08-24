@@ -7,6 +7,7 @@ using EventPAM.Identity.Identity.Services.UserService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using static EventPAM.Identity.Identity.Constants.Constants.Role;
 
 namespace EventPAM.Identity.Identity.Features.RefreshingToken.V1;
 
@@ -31,6 +32,7 @@ public class RefreshTokenEndpoint : BaseController, IMinimalEndpoint
                 return Results.Created(uri: "", result.AccessToken);
             }
         )
+        .RequireAuthorization(policy => policy.RequireRole([Admin, Customer, EventManager]))
         .WithName("RefreshToken")
         .WithApiVersionSet(builder.NewApiVersionSet("Identity").Build())
         .Produces<AccessToken>(StatusCodes.Status201Created)

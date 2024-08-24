@@ -4,6 +4,7 @@ using EventPAM.Event.Events.Features.CreatingEvent.V1;
 using EventPAM.Event.Events.ValueObjects;
 using EventPAM.Event.Venues.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+using static EventPAM.Event.Events.Constants.Constants.Role;
 
 namespace EventPAM.Event.Events.Features.UpdatingEvent.V1;
 
@@ -41,7 +42,7 @@ public class UpdateEventEndpoint : IMinimalEndpoint
 
                 return Results.Ok(result);
             })
-            .RequireAuthorization()
+            .RequireAuthorization(policy => policy.RequireRole([Admin, EventManager]))
             .WithName("UpdateEvent")
             .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
             .Produces(StatusCodes.Status200OK)

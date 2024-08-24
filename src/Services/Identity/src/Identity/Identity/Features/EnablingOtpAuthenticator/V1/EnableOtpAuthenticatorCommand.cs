@@ -6,6 +6,7 @@ using EventPAM.Identity.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using static EventPAM.Identity.Identity.Constants.Constants.Role;
 
 namespace EventPAM.Identity.Identity.Features.EnablingOtpAuthenticator.V1;
 
@@ -42,6 +43,7 @@ public class EnableOtpAuthenticatorEndpoint : BaseController, IMinimalEndpoint
                 return Results.Ok(response);
             }
         )
+        .RequireAuthorization(policy => policy.RequireRole([Admin, Customer, EventManager]))
         .WithName("EnableOtpAuthenticator")
         .WithApiVersionSet(builder.NewApiVersionSet("Identity").Build())
         .Produces<EnabledOtpAuthenticatorResponse>(StatusCodes.Status200OK)

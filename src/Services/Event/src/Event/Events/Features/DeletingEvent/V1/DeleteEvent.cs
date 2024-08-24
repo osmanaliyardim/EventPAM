@@ -1,5 +1,6 @@
 using EventPAM.BuildingBlocks.Core.Event;
 using Microsoft.EntityFrameworkCore;
+using static EventPAM.Event.Events.Constants.Constants.Role;
 
 namespace EventPAM.Event.Events.Features.DeletingEvent.V1;
 
@@ -22,7 +23,7 @@ public class DeleteEventEndpoint : IMinimalEndpoint
 
                     return Results.NoContent();
                 })
-            .RequireAuthorization()
+            .RequireAuthorization(policy => policy.RequireRole([Admin, EventManager]))
             .WithName("DeleteEvent")
             .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
             .Produces(StatusCodes.Status204NoContent)

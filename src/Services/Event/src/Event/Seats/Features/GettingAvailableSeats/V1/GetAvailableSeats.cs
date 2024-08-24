@@ -5,6 +5,7 @@ using EventPAM.Event.Repositories;
 using EventPAM.Event.Seats.Dtos;
 using EventPAM.Event.Seats.Exceptions;
 using MongoDB.Driver;
+using static EventPAM.Event.Events.Constants.Constants.Role;
 
 namespace EventPAM.Event.Seats.Features.GettingAvailableSeats.V1;
 
@@ -28,6 +29,7 @@ public class GetAvailableSeatsEndpoint : IMinimalEndpoint
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {
         builder.MapGet($"{EndpointConfig.BaseApiPath}/event/get-available-seats/{{eventId}}", GetAvailableSeats)
+            .RequireAuthorization(policy => policy.RequireRole([Admin, Customer]))
             .WithName("GetAvailableSeats")
             .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
             .Produces<GetAvailableSeatsResponseDto>(StatusCodes.Status200OK)

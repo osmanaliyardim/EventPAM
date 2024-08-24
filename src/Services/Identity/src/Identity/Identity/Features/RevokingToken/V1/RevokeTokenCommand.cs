@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Routing;
+using static EventPAM.Identity.Identity.Constants.Constants.Role;
 
 namespace EventPAM.Identity.Identity.Features.RevokingToken.V1;
 
@@ -36,6 +37,7 @@ public class RevokeTokenEndpoint : BaseController, IMinimalEndpoint
                 return Ok(result);
             }
         )
+        .RequireAuthorization(policy => policy.RequireRole([Admin, Customer, EventManager]))
         .WithName("RevokeToken")
         .WithApiVersionSet(builder.NewApiVersionSet("Identity").Build())
         .Produces<RevokedTokenResponse>(StatusCodes.Status200OK)

@@ -5,6 +5,7 @@ using EventPAM.Event.Seats.Models;
 using EventPAM.Event.Seats.ValueObjects;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using static EventPAM.Event.Events.Constants.Constants.Role;
 
 namespace EventPAM.Event.Events.Features.CreatingSeat.V1;
 
@@ -30,7 +31,7 @@ public class CreateSeatEndpoint : IMinimalEndpoint
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {
         builder.MapPost($"{EndpointConfig.BaseApiPath}/event/seat", CreateSeat)
-            .RequireAuthorization()
+            .RequireAuthorization(policy => policy.RequireRole([Admin, EventManager]))
             .WithName("CreateSeat")
             .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
             .Produces<CreateSeatResponse>(StatusCodes.Status200OK)

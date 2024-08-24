@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using static EventPAM.Identity.Identity.Constants.Constants.Role;
 
 namespace EventPAM.Identity.Identity.Features.VerifyingOtpAuthenticator.V1;
 
@@ -32,6 +33,7 @@ public class VerifyOtpAuthenticatorEndpoint : BaseController, IMinimalEndpoint
                 return Ok();
             }
         )
+        .RequireAuthorization(policy => policy.RequireRole([Admin, Customer, EventManager]))
         .WithName("VerifyOTPAuthenticator")
         .WithApiVersionSet(builder.NewApiVersionSet("Identity").Build())
         .Produces(StatusCodes.Status200OK)

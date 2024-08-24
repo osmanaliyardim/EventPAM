@@ -4,6 +4,7 @@ using EventPAM.Event.Venues.Models;
 using EventPAM.Event.Venues.ValueObjects;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using static EventPAM.Event.Events.Constants.Constants.Role;
 
 namespace EventPAM.Event.Venues.Features.CreatingVenue.V1;
 
@@ -38,7 +39,7 @@ public class CreateVenueEndpoint : IMinimalEndpoint
 
                 return Results.Ok(response);
             })
-            .RequireAuthorization()
+            .RequireAuthorization(policy => policy.RequireRole([Admin, EventManager]))
             .WithName("CreateVenue")
             .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
             .Produces<CreateVenueResponseDto>(StatusCodes.Status200OK)

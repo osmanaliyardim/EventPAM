@@ -1,5 +1,6 @@
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using static EventPAM.Event.Events.Constants.Constants.Role;
 
 namespace EventPAM.Event.Events.Features.GettingEventById.V1;
 
@@ -22,6 +23,7 @@ public class GetEventByIdEndpoint : IMinimalEndpoint
 
                     return Results.Ok(response);
                 })
+                .RequireAuthorization(policy => policy.RequireRole([Admin, Customer]))
                 .WithName("GetEventById")
                 .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
                 .Produces<GetEventByIdResponseDto>(StatusCodes.Status200OK)

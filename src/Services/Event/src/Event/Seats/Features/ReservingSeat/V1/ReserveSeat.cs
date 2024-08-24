@@ -1,6 +1,7 @@
 using EventPAM.BuildingBlocks.Core.Event;
 using EventPAM.Event.Seats.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using static EventPAM.Event.Events.Constants.Constants.Role;
 
 namespace EventPAM.Event.Seats.Features.ReservingSeat.V1;
 
@@ -22,7 +23,7 @@ public class ReserveSeatEndpoint : IMinimalEndpoint
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {
         builder.MapPost($"{EndpointConfig.BaseApiPath}/event/reserve-seat", ReserveSeat)
-            .RequireAuthorization()
+            .RequireAuthorization(policy => policy.RequireRole([Admin, Customer]))
             .WithName("ReserveSeat")
             .WithApiVersionSet(builder.NewApiVersionSet("Event").Build())
             .Produces<ReserveSeatResponseDto>(StatusCodes.Status200OK)

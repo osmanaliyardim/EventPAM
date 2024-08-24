@@ -8,6 +8,7 @@ using EventPAM.Ticketing.Ticketing.Exceptions;
 using EventPAM.Ticketing.Ticketing.ValueObjects;
 using MapsterMapper;
 using MassTransit;
+using static EventPAM.Ticketing.Ticketing.Constants.Constants.Role;
 
 namespace EventPAM.Ticketing.Ticketing.Features.CreatingTicket.V1;
 
@@ -40,7 +41,7 @@ public class CreateTicketingEndpoint : IMinimalEndpoint
 
                 return Results.Ok(response);
             })
-            .RequireAuthorization()
+            .RequireAuthorization(policy => policy.RequireRole([Admin, Customer]))
             .WithName("CreateTicketing")
             .WithApiVersionSet(builder.NewApiVersionSet("Ticketing").Build())
             .Produces<CreateTicketingResponseDto>(StatusCodes.Status200OK)
